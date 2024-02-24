@@ -1,0 +1,405 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\ (\hmwkClassInstructor): \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#1}
+\newcommand{\hmwkDueDate}{February 24, 2024}
+\newcommand{\hmwkClass}{Linear Algebra}
+\newcommand{\hmwkClassInstructor}{Gilbert Strang}
+\newcommand{\hmwkAuthorName}{\textbf{0130}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \vspace{0.1in}\large{\textit{\hmwkClassInstructor}}
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+    How could you decide if the vectors \( \mathbf{u} = (1,1,0)\) and \( 
+    \mathbf{v} = (0,1,1) \) and \( \mathbf{w} = (a,b,c) \) are linearly
+    independent or dependent?
+    \\
+
+    \solution
+
+    If \( a + b - c \neq 0 \), then these vectors are linearly independent,
+    otherwise they are linearly dependent.
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    How many corners \( (\pm 1, \pm 1, \pm 1, \pm 1) \) does a cube of side 2
+    have in 4 dimensions? What is its volume? How many 3D faces? How many edges?
+    Find one edge.
+    \\
+
+    \solution
+    
+    \begin{enumerate}
+        \item The cube has \( 16 \) corners.
+        \item The volume of the cube is \( 16 \).
+        \item There are \( 8 \) 3D faces.
+        \item There are \( 32 \) edges.
+        \item \( \left\{ (-1, -1, -1, -1), (-1, -1, -1, 1) \right\} \) is one edge.
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    The \textbf{triangule inequality} says: (length of \( \mathbf{v + w} \)) \( \leq \) (length
+     of \( \mathbf{v} \)) + (length of \( \mathbf{w} \)).
+    \begin{enumerate}
+        \item Show that \( ||\mathbf{v + w} ||^2 = ||\mathbf{v}||^2 + 2\mathbf{v}\cdot \mathbf{w}
+        + ||\mathbf{w}||^2\).
+        \item Increase that \( \mathbf{v \cdot w}\) to ||\( \mathbf{v}\)||\ ||\( \mathbf{w}\)||
+            to show that ||\textbf{side\ 3}|| cannot exceed ||\textbf{side\ 1}|| + ||\textbf{side\ 2}||:
+    \end{enumerate}
+
+    \solution
+
+    \begin{enumerate}
+        \item \( \mathbf{||v + w||^2 = (v + w) \cdot (v+w) = v^2 + }2\mathbf{v\cdot w + w^2 = ||v||^2 + } 
+        2\mathbf{v\cdot w + ||w||^2}\)
+        \item \( \mathbf{||side\ 3|| = ||side\ 1 - side\ 2|| \leq ||side\ 1|| + ||-side\ 2|| = ||side\ 1|| + ||side\ 2||} \)
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Which numbers \( q \) would leave \( A \) with two 
+    independent columns ?
+    \[  A = 
+        \begin{bmatrix}
+            1 & 0 & 2   \\
+            3 & 1 & 9   \\
+            5 & 0 & q
+        \end{bmatrix}
+        ,
+        A = 
+        \begin{bmatrix}
+            1 & 4 & 7   \\
+            2 & 5 & 8   \\
+            3 & 6 & q
+        \end{bmatrix}
+        ,
+        A =
+        \begin{bmatrix}
+            1 & 1 & 2   \\
+            2 & 2 & 4   \\
+            0 & 0 & q
+        \end{bmatrix}
+    \]
+
+    \solution
+
+    \begin{enumerate}
+        \item \( q = 10\).
+        \item \( q = 9\).
+        \item \( q \neq 0 \).
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    If \( (a,b) \) is a multiple of \( (c,d) \) with \( abcd \neq 0\),
+    show that \( (a,c) \) is a multiple of \( (b,d) \). This is
+    surprisingly important; two columns are failing on one line.
+    You could use numbers first to see how \( a, b, c, d\) are
+    related. The question will lead to:
+    \\
+    \[
+    \text{If}
+    \begin{bmatrix}
+        a & b   \\
+        c & d
+    \end{bmatrix}
+    \text{has dependent rows, then it also has dependent
+    columns.}
+    \]
+
+    \solution
+    \\
+
+    Suppose \( (a,c) \) is \( k \) times \( (b,d) \), then we have \( \frac{a}{b}
+     = \frac{kc}{kd} = \frac{c}{d} \).
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Why is it impossible for a matrix A with 7 columns and 4 rows to
+    have 5 independent columns? This is not a trivial or useless question.
+    \\
+
+    \solution
+    \\
+
+    This question is equivalent to asking the rank of a matrix is less than
+    or equal to the lesser of them. Recall the process of elimination, if 
+    we have 5 independent columns, then we should have 5 pivot, which conflicts
+     to the fact that we only have 4 rows.
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Going from left to right, put each column of \( A \) into the
+    matrix \( C \) if that column is not a combination of earlier columns:
+
+    \[
+        A = 
+        \begin{bmatrix}
+            2 & -2 & 1 & 6 & 0  \\
+            1 & -1 & 0 & 2 & 0  \\
+            3 & -3 & 0 & 6 & 1
+        \end{bmatrix}
+        \ \ \ 
+        C = 
+        \begin{bmatrix}
+            2 &  &  \\
+            1 &  &  \\
+            3 &  &  
+        \end{bmatrix}
+    \]
+
+    Find \( R \) in Problem 6 so that \( A = CR \).
+    If your \( C \) has \( r \) columns, then \( R \)
+    has \( r \) rows. The 5 columns of \( R \) tell how
+    to produce the 5 columns of \( A \) from the columns
+    in \( C \).
+    \\
+
+    \solution
+
+    \[
+        R = 
+        \begin{bmatrix}
+            -1 & -1 & 0 & 2 & 0 \\
+            0 & 0 & 1 & 2 & 0   \\
+            0 & 0 & 0 & 0 & 1
+        \end{bmatrix}
+    \]
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Complete these 2 by 2 matrices to meet the requirements printed
+    underneath:
+    \[
+\begin{array}{cccc}
+    \begin{bmatrix}
+        3 & 6 \\
+        5 &
+    \end{bmatrix} &
+    \begin{bmatrix}
+        6 & 7 \\
+        6 &
+    \end{bmatrix} &
+    \begin{bmatrix}
+        3 &   \\
+        3 & 6
+    \end{bmatrix} &
+    \begin{bmatrix}
+        3 & 4 \\
+          & -3
+    \end{bmatrix} \\
+    \text{rank one} & \text{orthogonal columns} & \text{rank 2} & A^2 = I
+\end{array}
+\]
+
+\solution
+
+\[
+    \begin{bmatrix} 
+        3 & 6 \\ 5 & 10
+        \end{bmatrix}
+        ,
+        \begin{bmatrix}
+        6 & 7 \\ 7 & -6
+        \end{bmatrix}
+        ,
+        \begin{bmatrix}
+        2 & 3 \\ 3 & 6
+        \end{bmatrix}
+        ,
+        \begin{bmatrix}
+        3 & 4 \\ -2 & -3
+        \end{bmatrix}
+\]
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    True or false, with a reason:
+    \begin{enumerate}
+        \item  If 3 by 3 matrices \( A \) and \( B \) have rank 1,
+         then \( AB \) will always have rank 1.
+        \item If 3 by 3 matrices \( A \) and \( B \) have rank 3,
+         then \( AB \) will always have rank 3.
+        \item  Suppose \( AB = BA \) for every 2 by 2 matrix \( B \). Then
+        \( A = \begin{bmatrix}
+            c & 0   \\
+            0 & c
+         \end{bmatrix}
+            = cI
+        \) for some number \( c \).
+        Only those matrices \( A = cI \) commute with every \( B \).
+        \\
+
+        \solution
+
+        \begin{enumerate}
+            \item No.consider the following matrices
+                \[
+                    A = 
+                    \begin{bmatrix}
+                        1 & 0 & 0   \\
+                        0 & 0 & 0   \\
+                        0 & 0 & 0
+                    \end{bmatrix}
+                    ,
+                    B = 
+                    \begin{bmatrix}
+                        0 & 0 & 0   \\
+                        0 & 1 & 0   \\
+                        0 & 0 & 0
+                    \end{bmatrix}
+                \]
+            \item Yes, rank (\( AB \)) = rank (\( A \)) = 3
+                since rank (\( B \)) = 3.
+            \item Omitted.
+        \end{enumerate}
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    How many small multiplications for \( (AB)C \) and \( A(BC) \) if those
+    matrices have sizes ABC = \( (4 \times 3) (3 \times 2) (2 \times 1)\)? The two counts are different.
+    \\
+
+    \solution
+    \\
+    32;24
+
+\end{homeworkProblem}
+
+\end{document}

@@ -1,0 +1,507 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{boondox-cal}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\ (\hmwkClassInstructor): \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#2}
+\newcommand{\hmwkDueDate}{February 24, 2024}
+\newcommand{\hmwkClass}{Linear Algebra}
+\newcommand{\hmwkClassInstructor}{Gilbert Strang}
+\newcommand{\hmwkAuthorName}{\textbf{0130}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \vspace{0.1in}\large{\textit{\hmwkClassInstructor}}
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+    What multiple \( \mathcal{l} \) of equation 1 should be subtracted from equation 2 to
+    remove \( c \)?
+    
+    \[
+        \begin{split}
+            ax + by = f
+            \\
+            cx + dy = g.
+        \end{split}
+    \]
+
+    The first pivot is \( a \) (assumed nonzero). Elimination produces what formula
+    for the second pivot? What is \( y \)? The second pivot is missing when \( ad = bc \): singular.
+    \\
+
+    \solution
+
+    \begin{enumerate}
+        \item \( \mathcal{l} = \frac{c}{a} \).
+        \item formula: \( (d - \frac{c}{b}) y = g - \frac{c}{a}f \)
+        \item \( y = \frac{ag-cf}{ad-bc}\)
+    \end{enumerate}
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    For which three numbers \( k \) does elimination break down? Which is fixed
+    by a row exchange? Is the number of solutions \( 0 \) or \( 1 \) or \( \infty \)?
+    
+    \[
+        \begin{split}
+            kx + 3y &= 6    \\
+            3x + ky &= -6
+        \end{split}
+    \]
+
+    \solution
+
+    \begin{enumerate}
+        \item \( k = 0, 3, -3 \)
+        \item if \( k = 0 \), a row exchange can be used to fix the elimination.
+        \item \begin{enumerate}
+            \item \( k = 0 \) has \( 1 \) solution.
+            \item \( k = 3 \) has \( 0 \) solution.
+            \item \( k = -3 \) has \( \infty \) solutions.
+        \end{enumerate}
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Which number \( d \) forces a row exchange, and what is the
+    triangular system (not singular) for that \( d \)? Which \( d \)
+    makes this system singular (no third pivot) ?
+
+    \[
+        \begin{split}
+            2x + 5y  + z &= 0   \\
+            4x + dy + z &= 2    \\
+            y - z &= 3
+        \end{split}
+    \]
+    \\
+
+    \solution
+
+    \begin{enumerate}
+        \item \( d = 10 \) forces a row exchange.
+        \item \[
+            \begin{split}
+                \begin{bmatrix}
+                    2 & 5 & 1   \\
+                    0 & 1 & -1  \\
+                    0 & 0 & -1
+                \end{bmatrix}
+            \end{split}
+            \]
+        \item \(d = 11\) makes the system singular.
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Write down the 3 by 3 matrices that produce these elimination steps:
+    
+    \begin{enumerate}
+        \item \( E_{21} \) subtracts 5 times row 1 from row 2.
+        \item \( E_{32} \) subtracts -7 times row 2 from row 3.
+        \item \( P \) exchanges rows 1 and 2, then rows 2 and 3.
+    \end{enumerate}
+
+    \solution
+   
+    \begin{enumerate}
+        \item \[ E_{21} =
+            \begin{bmatrix}
+                1 & 0 & 0   \\
+                -5 & 1 & 0  \\
+                0 & 0 & 1
+            \end{bmatrix}
+            \]
+        \item \[ E_{32} =
+            \begin{bmatrix}
+                1 & 0 & 0   \\
+                0 & 1 & 0   \\
+                0 & 7 & 1
+            \end{bmatrix}
+            \]
+        \item \[ P =
+            \begin{bmatrix}
+                0 & 1 & 0   \\
+                0 & 0 & 1   \\
+                1 & 0 & 0
+            \end{bmatrix}
+            \]
+    \end{enumerate}
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Which three matrices \( E_{21}, E_{31}, E_{32} \) put \( A \)
+    into triangular form \( U \)?
+
+    \[
+        A =
+        \begin{bmatrix}
+            1 & 1 & 0   \\
+            4 & 6 & 1   \\
+            -2 & 2 & 0
+        \end{bmatrix}
+    \]
+
+    and \( E_{32}E_{31}E_{21}A = EA = U \).
+    \\
+
+    Multiply those \( E \)'s to get one elimination matrix \( E \).
+    What is \( E^{-1} = L\)?
+    \\
+
+    Include \( \mathbf{b} = (1,0,0) \) as a fourth column to produce
+    \( [A\ \mathbf{b}] \). Carry out the elimination steps on this augmented
+    matrix to solve \( A\mathbf{x} = \mathbf{b} \).
+    \\
+
+    \solution
+
+    \begin{enumerate}
+        \item 
+            \[ 
+            E_{21} =
+                \begin{bmatrix}
+                    1 & 0 & 0   \\
+                    -4 & 1 & 0  \\
+                    0 & 0 & 1
+                \end{bmatrix}
+                ,
+            E_{31} =
+            \begin{bmatrix}
+                1 & 0 & 0   \\
+                0 & 1 & 0  \\
+                2 & 0 & 1
+            \end{bmatrix}
+            ,
+            E_{32} =
+                \begin{bmatrix}
+                    1 & 0 & 0   \\
+                    0 & 1 & 0  \\
+                    0 & -2 & 1
+                \end{bmatrix}
+            \]
+        \item 
+            \[
+                E = E_{32}E_{31}E_{21} =
+                \begin{bmatrix}
+                    1 & 0 & 0   \\
+                    -4 & 1 & 0  \\
+                    10 & -2 & 1
+                \end{bmatrix}
+                ,
+                L = E^{-1} =
+                \begin{bmatrix}
+                    1 & 0 & 0   \\
+                    4 & 1 & 0  \\
+                    0 & 2 & 1
+                \end{bmatrix}
+            \]
+        \item 
+            Apply the elimination steps to \( [ A\ \mathbf{b} ]\), then we get \( [U\ L\mathbf{b}] \):
+            \[
+                \begin{bmatrix}
+                    1 & 1 & 0 & 1   \\
+                    0 & 2 & 1 & 4   \\
+                    0 & 0 & -2 & 0
+                \end{bmatrix}
+            \]
+            
+            then we know \( \mathbf{x} = {[-1, 2, 0]}^{T}\).
+    \end{enumerate}
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Suppose \( A \) is invertible and you exchange its first two rows to reach
+    \( B \). Is the new matrix \( B \) invertible? How would you find \( B^{-1} \) from
+    \( A^{-1} \)?
+    \\
+
+    \solution
+    \\
+
+    Yes, \( B \) is invertible. And since \( B = P_{12}A \), \( P_{12}^{-1} = P_{12}\),
+    we have \( B^{-1} = A^{-1}P_{12} \), where \( P_{12} \) is the permutation matrix.
+    And the formula implies that \( B^{-1} \) can be found by exchange the first two
+    columns of \( A^{-1} \).
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    \begin{enumerate}
+        \item What 3 by 3 matrix \( E \) has the same effect as these three steps? Subtract
+                row 1 from row 2, subtract row 1 from row 3, then subtract row 2 from row 3.
+        \item What single matrix \( L \) has the same effect as these three reverse steps? Add
+                row 2 to row 3, add row 1 to row 3, then add row 1 to row 2.
+    \end{enumerate}
+
+    \solution
+    
+    \begin{enumerate}
+        \item \[ E = 
+            \begin{bmatrix}
+                1 & 0 & 0   \\
+                -1 & 1 & 0  \\
+                0 & -1 & 1
+            \end{bmatrix}
+            \]
+        \item \[ L = 
+            \begin{bmatrix}
+                1 & 0 & 0   \\
+                1 & 1 & 0  \\
+                1 & 1 & 1
+            \end{bmatrix}
+            \]
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Prove that \( A \) is invertible if \( a \neq 0 \) and \( a \neq b \)
+    (find the pivots of \( A^{-1} \)). Then find three numbers \( c \) so that
+    \( C \) is not invertible.
+
+    \[  A = 
+        \begin{bmatrix}
+            a & b & b   \\
+            a & a & b   \\
+            a & a & a
+        \end{bmatrix}
+        ,
+        C = 
+        \begin{bmatrix}
+            2 & c & c   \\
+            c & c & c   \\
+            8 & 7 & c
+        \end{bmatrix}
+    \]
+    \\
+
+    \solution
+
+    \begin{enumerate}
+        \item \[ A^{-1} =
+                \begin{bmatrix}
+                   a & b & b   \\
+                   0 & a-b & 0  \\
+                   0 & 0 & a-b 
+                \end{bmatrix}
+            \]
+        The pivots of \( A^{-1} \) are \( a, a-b, a-b \), so \( A \) is invertible.
+        \item \( c = 0, 2, 7 \) makes \( C \) not invertible.
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    What three elimination matrices \( E_{21}, E_{31}, E_{32} \) put \( A \) into its
+    upper triangular form \( E_{32}E_{31}E_{21}A = U\)? Multiply by \( E_{32}^{-1}, E_{31}^{-1}, E_{21}^{-1}\)
+    to factor \( A \) into \( L \) times \( U \):
+
+    \[
+        A = 
+        \begin{bmatrix}
+            1 & 0 & 1   \\
+            2 & 2 & 2   \\
+            3 & 4 & 5
+        \end{bmatrix}
+    \]
+
+and \( L = E_{21}^{-1}E_{31}^{-1}E_{32}^{-1} \).
+\\
+
+\solution
+
+\[  E_{21} =
+    \begin{bmatrix}
+        1 & 0 & 0   \\
+        -2 & 1 & 0  \\
+        0 & 0 & 1
+    \end{bmatrix}
+    ,
+    E_{31} =
+    \begin{bmatrix}
+        1 & 0 & 0   \\
+        0 & 1 & 0  \\
+        -3 & 0 & 1
+    \end{bmatrix}
+    ,
+    E_{32} =
+    \begin{bmatrix}
+        1 & 0 & 0   \\
+        0 & 1 & 0  \\
+        0 & -2 & 1
+    \end{bmatrix}
+\]
+
+then we can represent \( A \) as \( A = LU \), where
+
+\[  L = 
+    \begin{bmatrix}
+        1 & 0 & 0   \\
+        2 & 1 & 0  \\
+        3 & 2 & 1
+    \end{bmatrix}
+    ,
+    U = 
+    \begin{bmatrix}
+        1 & 0 & 1   \\
+        0 & 2 & 0   \\
+        0 & 0 & 2
+    \end{bmatrix}
+\]
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    \begin{enumerate}
+        \item How many entries of \( S \) can be chosen
+                independently, if \( S = S^T \) is 5 by 5?
+        \item How do L and D (still 5 by 5) give the same
+                number of entries in \( LDL^T \)?
+        \item How many entries of \( A \) can be chosen 
+                if \( A \) is skew-symmetric? (\(A^T = -A \)).
+        \item Why does \( A^T A \) have no negetive numbers on its
+                diagonal?
+    \end{enumerate}
+
+    \solution
+
+    \begin{enumerate}
+        \item 15.
+        \item Ommited (Not sure what's the meaning of the question).
+        \item Suppose \( A \) is \( n \) by \( n \), then the answer is \( n \).
+        \item Because if we consider the i-i entry of \( A^T A \), we have:
+                \[
+                    {A^T A}_{ii} = \sum_{j=1}^{n} {A^T}_{ij} A_{ji} = \sum_{j=1}^{n} {A_{ji}}^2 \geq 0
+                \]
+    \end{enumerate}
+\end{homeworkProblem}
+
+\end{document}

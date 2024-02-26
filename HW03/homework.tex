@@ -1,0 +1,674 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{boondox-cal}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\ (\hmwkClassInstructor): \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#3}
+\newcommand{\hmwkDueDate}{February 26, 2024}
+\newcommand{\hmwkClass}{Linear Algebra}
+\newcommand{\hmwkClassInstructor}{Gilbert Strang}
+\newcommand{\hmwkAuthorName}{\textbf{0130}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \vspace{0.1in}\large{\textit{\hmwkClassInstructor}}
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+    \begin{enumerate}
+        \item Which rules are broken if we keep only the positive numbers
+            \( x > 0 \) in \( \mathbf{R}^1 \)? Every \( c \) must be allowed.
+            This half-line is not a subspace.
+        \item The positive numbers with \( \mathbf{x} + \mathbf{y} \) and
+            \( c \mathbf{x} \) redefined to equal the usual \( xy \) and \( x^c \)
+            do satisfy the eight rules. Test rule 7 when \( c = 3, x = 2, y = 1 \).
+            (Then \( \mathbf{x} + \mathbf{y} = 2\)) and \( c\mathbf{x} = 8 . \)
+            Which number acts as the ``zero vector'' in this space?
+    \end{enumerate}
+
+    \solution
+
+    \begin{enumerate}
+        \item Rule 4.
+        \item 1 acts as the ``zero vector'' in this space.
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    \( M \) is the space of 2 by 2 matrices.
+    \begin{enumerate}
+        \item Describe a subspace of \( M \) that contains \( A = \begin{bmatrix}
+            1 & 0   \\
+            0 & 0
+        \end{bmatrix}\)
+        but not \( B = \begin{bmatrix}
+            0 & 0   \\
+            0 & -1
+        \end{bmatrix} \).
+        \item If a subspace of \( M \) does contain \( A \) and \( B \), must it contain
+            the identity matrix?
+        \item Describe a subspace of \( M \) that contains no nonzero diagonal matrices.
+    \end{enumerate}
+
+    \solution
+
+    \begin{enumerate}
+        \item \( \left\{ Q\ |\ Q = c\begin{bmatrix} 1 & 0   \\ 0 & 0\end{bmatrix}, c \in \mathbb{R} \right\} \)
+        \item Yes, because identity matrix is a linear combination of \( A \) and \( B \).
+        \item \( \left\{ Q\ |\ Q = \begin{bmatrix}
+            0 & a   \\
+            b & 0
+        \end{bmatrix}, a, b \in \mathbb{R}
+        \right\}\)
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    The columns of \( AB \) are combinations of the columns of \( A \). This means: The column space
+    of \( AB \) is contained in (possibly equal to) the column space \( A \). Give an example
+    where the columns spaces of \( A \) and \( AB \) are not equal.
+    \\
+
+    \solution
+    \\
+
+    We can consider the case where the matrix \( B \) is not full of rank and give
+    the following example:
+
+    \[
+        A = 
+        \begin{bmatrix}
+            1 & 0   \\
+            0 & 1
+        \end{bmatrix}
+        ,
+        B = 
+        \begin{bmatrix}
+            1 & 0   \\
+            0 & 0
+        \end{bmatrix}
+        ,
+        AB = 
+        \begin{bmatrix}
+            1 & 0   \\
+            0 & 0
+        \end{bmatrix}
+    \]
+
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+    (nullspace of \( A \)) Create a 2 by 4 matrix \( R \) whose
+    special solutions to \( R\mathbf{x} = 0 \) are
+    \( \mathbf{s}_1 \) and \( \mathbf{s}_2 \):
+
+    \[
+        \mathbf{s}_1 =
+        \begin{bmatrix}
+            -3&          \\
+            \mathbf{1}&  \\
+            0&           \\
+            \mathbf{0}&
+        \end{bmatrix}
+        \ \ \ 
+        \text{and}
+        \ \ \ 
+        \mathbf{s}_2 =
+        \begin{bmatrix}
+            -2&          \\
+            \mathbf{0}&  \\
+            -6&           \\
+            \mathbf{1}&
+        \end{bmatrix}
+    \]
+pivots columns 1 and 3 free variables \( x_2\) and \(x_4 \),
+\( x_2 \) and \( x_4 \) are 1,0 and 0,1 in the ``special solutions''.
+\\
+
+Describe all 2 by 4 matrices with this nullspace \( \mathbf{N}(A) \) spanned by \( \mathbf{s}_1 \) and \( \mathbf{s}_2 \).
+\\
+
+\solution
+
+\[      
+    \mathbf{N}(A) = \left\{ c_1\mathbf{s}_1 + c_2\mathbf{s}_2\ |\ c_1, c_2 \in \mathbb{R}
+    \right\} = \left\{
+        c_1
+        \begin{bmatrix}
+            -3 &    \\
+            \mathbf{1} & \\
+            0 &   \\
+            \mathbf{1}
+        \end{bmatrix}
+        +
+        c_2
+        \begin{bmatrix}
+            -2 &    \\
+            \mathbf{0} &  \\
+            -6 &    \\
+            \mathbf{1}
+        \end{bmatrix}
+        \ |\ 
+        c_1, c_2 \in \mathbb{R}
+    \right\}
+\]
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Suppose an \( m \) by \( n \) matrix has \( r \) pivots. The number
+    of special solutions (basis for the nullspace) is \underline{\ \ \ \ \ \ }
+    by the Counting Theorem. The nullspace contains only \( \mathbf{x = 0} \) when
+    \( r = \underline{\ \ \ \ \ \ } \). The column space is all of \( \mathbf{R}^m \)
+    when the rank is \( r = \underline{\ \ \ \ \ \ } \).
+    \\
+
+    \solution
+
+    \begin{enumerate}
+        \item \( n - r \)
+        \item \( n \)
+        \item \( m \)
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Construct a matrix whose column space contains (1,1,5) and (0,3,1)
+    and whose nullspace contains (1,1,2).
+    \\
+
+    \solution
+
+    \[
+        \begin{bmatrix}
+            1 & 0 & -\frac{1}{2} \\
+            1 & 3 & -2 \\
+            5 & 1 & -3
+        \end{bmatrix}
+    \]
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    If \( AB = 0 \) then the column space of \( B \)
+    is contained in the \underline{\ \ \ \ \ \ } of \( A \). Why?
+    \\
+
+    \solution
+
+    The column space of \( B \) is contained in the nullspace of \( A \).
+    Because if we rewrite matrix \( B \) as the following form:
+
+    \[
+        B = [B_1, B_2, \ldots , B_q]
+    \]
+
+    where the column number of \( B_i (i \in \left\{ 1, \ldots, q \right\}) \)
+    is 1,then \( AB \) can be represented as \( [AB_1, AB_2, \ldots, AB_q] \),
+    and we know \( B_1, \ldots, B_q \) are in the nullspace of A since \( AB = 0 \).
+    Then we know the space spanned by \( B_1, \ldots, B_q \) (which is the column space
+    of \( B \)) is contained in the nullspace of \( A \).
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    How is the nullspace \( \mathbf{N}(C) \) related to the spaces \( \mathbf{N}(A) \)
+    and \( \mathbf{N}(B) \), if \( C = \begin{bmatrix}
+        A   \\
+        B
+    \end{bmatrix}\)?
+    \\
+
+    \solution
+    \\
+
+    \( \mathbf{N}(C) = \mathbf{N}(A)\ \cap\ \mathbf{N}(B) \).
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    \( A = C\begin{bmatrix}
+        I\ \ F
+    \end{bmatrix} = C \begin{bmatrix}
+        1 & 0 & 1 & 2   \\
+        0 & 1 & 3 & 1
+    \end{bmatrix}\).
+    \( C \) has 2 independent columns.
+    \\
+
+    Find the 2 special solutions to \( A\mathbf{x} = \mathbf{0} \)
+    of the form \( (x_1, x_2, 1, 0) \) and \( (x_1, x_2, 0, 1) \).
+    \\
+
+    Note: If \( A\mathbf{x} = \mathbf{b} \) has a solution \( x = x_p \) then
+    all its solutions have the form \( x = x_p + x_n \). Here 
+    \( x_p \) is the only solution in the row space of \( A \) and \( x_n \)
+    is in the nullspace of \( A \) (so \(Ax_n = 0 \)).
+    \\
+
+    \solution
+    \\
+
+    Let \( R = \begin{bmatrix}
+        1 & 0 & 1 & 2   \\
+        0 & 1 & 3 & 1
+    \end{bmatrix}\), then \( A\mathbf{x} = 0 \) has the same solutions of \( R\mathbf{x} = 0 \).
+    We can find two special solutions by specifying the free variables to (1, 0) and (0, 1):
+
+    \[
+        \mathbf{v}_1 = \begin{pmatrix}
+            -2, -3, 1, 0
+        \end{pmatrix},
+        \mathbf{v}_2 = \begin{pmatrix}
+            -2, -1, 0, 1
+        \end{pmatrix}
+    \]
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Write the complete solution as \( \mathbf{x}_p \) plus
+    any multiple of \( \mathbf{s} \) in the nullspace:
+
+    \[
+        \begin{array}{ll}
+            x + 3y = 7  \\
+            2x + 6y = 14
+        \end{array}
+        \ \ \ \ \ \ 
+        \begin{array}{ll}
+            x + 3y + 3z = 1 \\
+            2x + 6y + 9z = 5    \\
+            -x - 3y + 3z = 5
+        \end{array}
+    \]
+
+    \solution
+
+    \begin{enumerate}
+        \item \( \mathbf{x}_p = \begin{bmatrix}
+            1   \\
+            2
+        \end{bmatrix} + 
+        c \begin{bmatrix}
+            1&   \\
+            -\frac{1}{3}&
+        \end{bmatrix},\ c \in \mathbb{R} \)
+        \item \( \mathbf{x}_p = \begin{bmatrix}
+            1&  \\
+            -1& \\
+            1
+        \end{bmatrix} + c
+        \begin{bmatrix}
+            3&   \\
+            -1&  \\
+            0&
+        \end{bmatrix},\ c \in \mathbb{R}\)
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Under what conditions on \( b_1, b_2, b_3 \) are these systems solvable?
+    Include \( \mathbf{b} \) as a fourth column in elimination. Find all solutions
+    when that solvability condition holds:
+
+    \[
+        \begin{array}{ll}
+            x + 2y - 2z = b_1   \\
+            2x + 5y - 4z = b_2  \\
+            4x + 9y - 8z = b_3
+        \end{array}
+        \ \ \ \ \ \
+        \begin{array}{ll}
+            2x + 2z = b_1   \\
+            4x + 4y = b_2   \\
+            8x + 8y = b_3
+        \end{array}
+    \]
+
+    \solution
+
+    \begin{enumerate}
+        \item \( b_3 - b_2 - 2b_1 = 0\).
+        \item \( b_3 - 2b_2 = 0 \).
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Construct a 2 by 3 system \( A\mathbf{x} = \mathbf{b} \) with
+    particular solution \( \mathbf{x}_p = \begin{pmatrix}
+        2, 4, 0
+    \end{pmatrix}\)
+    and homogeneous solution \( \mathbf{x}_n \) = any multiple
+    of (1,1,1).
+    \\
+
+    \solution
+
+    The augmented matrix of this system is given below:
+
+    \[
+        \begin{bmatrix}
+            1 & 2 & -3 & 10 \\
+            4 & 3 & -7 & 20
+        \end{bmatrix}
+    \]
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Give examples of matrices \( A \) for which the number of
+    solutions to \( A\mathbf{x} = \mathbf{b} \) is
+    \begin{enumerate}
+        \item 0 or 1, depending on \( \mathbf{b} \)
+        \item \( \infty \), regardless of \( \mathbf{b} \)
+        \item 0 or \( \infty \), depending on \( \mathbf{b} \)
+        \item 1, regardless of \( \mathbf{b} \)
+    \end{enumerate}
+
+    \solution
+    \\
+
+    The number of solutions is determined by the rank of \( A \), suppose \( A \) is a n by m matrix.
+
+    \begin{enumerate}
+        \item rank\( (A) \) = n < m: \( A = \begin{bmatrix}
+            1 & 0   \\
+            0 & 1   \\
+            0 & 0   \\
+            0 & 0
+        \end{bmatrix} \)
+        \item rank\( (A) \) = m < n: \(  A = \begin{bmatrix}
+            1 & 0 & 0 & 0   \\
+            0 & 0 & 0 & 1
+        \end{bmatrix} \)
+        \item rank \( (A) \) < m; rank \( (A) \) < n: \( A = \begin{bmatrix}
+            1 & 0 & 0 & 0   \\
+            0 & 0 & 0 & 0
+        \end{bmatrix} \)
+        \item rank \( (A) \) = n = m: \( A = \begin{bmatrix}
+            1 & 0 & 0   \\
+            0 & 1 & 0   \\
+            0 & 0 & 1
+        \end{bmatrix}\)
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Find a basis (independent vectors that span the subspace) for each of these subspaces
+    of \( \mathbf{R}^4 \):
+    \begin{enumerate}
+        \item All vectors whose components are equal.
+        \item All vectors whose components add to zero.
+        \item All vectors that are perpendicular to (1, 1, 0, 0) and (1, 0, 1, 1).
+        \item The column space and the nullspace of \( I \) (4 by 4).
+    \end{enumerate}
+
+    Find a basis (and the dimension) for each of these subspaces of 3 by 3 matrices:
+
+    \begin{enumerate}
+        \item All symmetric matrices (\( A^T = A \)).
+        \item All skew-symmetric matrices (\( A^T = -A \)).
+    \end{enumerate}
+
+    \solution
+
+    \begin{enumerate}
+        \item \( \begin{bmatrix}
+            1   \\
+            1   \\
+            1   \\
+            1
+        \end{bmatrix}\)
+        \item \( \begin{bmatrix}
+            1&   \\
+            1&   \\
+            -1&  \\
+            -1&
+        \end{bmatrix},
+        \begin{bmatrix}
+            1&  \\
+            2&  \\
+            -2&  \\
+            -1&  
+        \end{bmatrix},
+        \begin{bmatrix}
+            3&  \\
+            1&  \\
+            -3& \\
+            -1&
+        \end{bmatrix}
+        \)
+        \item Let \( A = \begin{bmatrix}
+            1 & 1 & 0 & 0   \\
+            1 & 0 & 1 & 1
+        \end{bmatrix}\), the question is, find a basis of the nullspace of \( A \)?
+        Using elimination, a basis is given below:
+        \[
+            \begin{bmatrix}
+                -1&  \\
+                1&   \\
+                1&   \\
+                0&
+            \end{bmatrix},
+            \begin{bmatrix}
+                -1& \\
+                1&  \\
+                0&  \\
+                1&
+            \end{bmatrix}
+        \]
+        \item \begin{enumerate}
+            \item A basis of the column space of \( I \):
+                \[
+                    \begin{bmatrix}
+                        1&  \\
+                        0&  \\
+                        0&  \\
+                        0
+                    \end{bmatrix},
+                    \begin{bmatrix}
+                        0&  \\
+                        1&  \\
+                        0&  \\
+                        0
+                    \end{bmatrix},
+                    \begin{bmatrix}
+                        0&  \\
+                        0&  \\
+                        1&  \\
+                        0
+                    \end{bmatrix},
+                    \begin{bmatrix}
+                        0&  \\
+                        0&  \\
+                        0&  \\
+                        1
+                    \end{bmatrix}
+                \]
+            \item The nullspace of \( I \) doesn't have any bases.
+        \end{enumerate}
+        \item Let \( S \) represents the subspace of all symmetric matrices, we can regard
+            3 by 3 matrix as a 9-dim vector. A basis of this subspace is given below:
+            \[
+            \begin{bmatrix}
+                1 & 0 & 0   \\
+                0 & 0 & 0   \\
+                0 & 0 & 0
+            \end{bmatrix},
+            \begin{bmatrix}
+                0 & 0 & 0   \\
+                0 & 1 & 0   \\
+                0 & 0 & 0
+            \end{bmatrix},
+            \begin{bmatrix}
+                0 & 0 & 0   \\
+                0 & 0 & 0   \\
+                0 & 0 & 1
+            \end{bmatrix},
+            \begin{bmatrix}
+                0 & 1 & 0   \\
+                1 & 0 & 0   \\
+                0 & 0 & 0
+            \end{bmatrix},
+            \begin{bmatrix}
+                0 & 0 & 1   \\
+                0 & 0 & 0   \\
+                1 & 0 & 0
+            \end{bmatrix},
+            \begin{bmatrix}
+                0 & 0 & 0   \\
+                0 & 0 & 1   \\
+                0 & 1 & 0
+            \end{bmatrix},
+            \]
+        And we know dim\(( S )\) = 6.
+    \item Let \( S \) represents the subspace of all skew-symmetric
+    matrices, a basis of this subspace is given below: \[
+            \begin{bmatrix}
+                0 & -1 & 0  \\
+                1 & 0 & 0   \\
+                0 & 0 & 0
+            \end{bmatrix},
+            \begin{bmatrix}
+                0 & 0 & -1  \\
+                0 & 0 & 0   \\
+                1 & 0 & 0
+            \end{bmatrix},
+            \begin{bmatrix}
+                0 & 0 & 0   \\
+                0 & 0 & -1  \\
+                0 & 1 & 0
+            \end{bmatrix}
+        \]
+    And we know dim\( (S) \) = 3.
+    \end{enumerate}
+\end{homeworkProblem}
+
+
+
+\end{document}

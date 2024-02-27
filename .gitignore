@@ -14,7 +14,3 @@
 *.bbl
 *.blg
 *.bib
-
-# tex file
-*.tex
-*.sty

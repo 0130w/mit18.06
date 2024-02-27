@@ -4,6 +4,8 @@ This repo contains my solutions of mit18.06 Problem Sets.
 
 If you find any errors, feel free to raise an issue and I'll check and correct them the first time I see them.
 
+related link: [mit 18.06](https://github.com/mitmath/1806)
+
 ## TODO
 
 - [x] HW01

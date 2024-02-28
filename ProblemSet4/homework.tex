@@ -143,6 +143,18 @@
 
 \pagebreak
 
+Since in this homework we repeatedly use the fact that if the columns of \( A \)
+is linear independent then we have the matrix \( A^T A \) is invertible, I want to
+prove this at the beginning.
+\\
+
+So the core is that I want to show that \( x \) must be \( \mathbf{0} \) if the columns
+of \( A \) is independent and \( A^T A x = 0 \), the method in lecture 16 is that we can
+multiply the transpose of \( x \) in the both sides of the equation, then we get \( x^T A^T A x = {(Ax)}^T (Ax) = 0 \),
+then we know \( Ax = 0 \). But we can also think of that since the columns of \( A \) is independent, we have
+\( \dim {\mathbf{N}(A^T)} = 0 \), which means \( Ax \) must be the zero vector. Then using the 
+assumption of the independency of columns, we know \( x \) must be the zero vector.
+
 \begin{homeworkProblem}
 
     Find the \textbf{incidentce matrix} and its rank and one

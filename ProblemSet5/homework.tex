@@ -1,0 +1,586 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{boondox-cal}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{listings}
+\usepackage{algpseudocode}
+
+\usetikzlibrary{automata,positioning, arrows.meta}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\ (\hmwkClassInstructor): \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#5}
+\newcommand{\hmwkDueDate}{February 29, 2024}
+\newcommand{\hmwkClass}{Linear Algebra}
+\newcommand{\hmwkClassInstructor}{Gilbert Strang}
+\newcommand{\hmwkAuthorName}{\textbf{0130}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \vspace{0.1in}\large{\textit{\hmwkClassInstructor}}
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+% empty underline
+\newcommand{\emptyunderline}{\underline{\ \ \ \ \ \ }}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+Before start this homework, let's review the process of Gram-Schmidt method.
+So the reason why we want to get orthonormal basis is that, in the chapter
+of the projection of a vector onto a subspace,  we know that if we want to project a vector
+to the column space of a matrix \( A \), the corresponding projection matrix is
+
+\[
+    P = A{(A^T A)}^{-1} A^T
+\]
+
+if we have an orthonormal basis for the column space, the above formula becomes:
+
+\[
+    P = QQ^T
+\]
+
+which is much easier to compute. And remember, here the columns of \( A \) must be
+linearly independent, otherwise we can't do the Gram-Schmidt process.
+\\
+
+Let's think of Gram-Schmidt process in the 2 dimension case first.
+We pick the first column
+vector \( \mathbf{a}_1 / || \mathbf{a}_1 || \) as the first vector \( \mathbf{e}_1 \), and try to find the second vector that is orthogonal
+to the first one. What we do is to project the second column vector \( \mathbf{a}_2 \) to the first one,
+decompose \( \mathbf{a}_2 \) into two parts \( \mathbf{v}_2 + \mathbf{p}_2 \), where
+\( \mathbf{v}_2 \bot  \mathbf{e}_1 \) and \( \mathbf{p}_2 \in\ \text{span}(\mathbf{e}_1) \), we then have
+
+\[  
+    \begin{array}{ll}
+        \mathbf{e}_1^T(\mathbf{a}_2 - \mathbf{p}_2) = 0 \\
+
+        \mathbf{p}_2 = c_2 \mathbf{e}_1, c_2 \in \mathbb{R}
+    \end{array}
+\]
+
+after some calculation, we get \( c_2 = \mathbf{e}_1^T \mathbf{a}_2 / \mathbf{e}_1^T\mathbf{e}_1 \), so \( \mathbf{v}_2 \) can be computed as:
+
+\[ \mathbf{v}_2 =  \mathbf{a}_2 - \frac{\mathbf{e}_1^T \mathbf{a}_2}{\mathbf{e}_1^T \mathbf{e_1}} \mathbf{e}_1 = \mathbf{a}_2 - \mathbf{e}_1^T \mathbf{a}_2 \mathbf{e}_1
+\]
+
+then we can get the second vector \( \mathbf{e}_2 = \mathbf{v}_2 / || \mathbf{v}_2 || \).
+\\
+
+After discussing the 2 dimension case, we can talk about the general case which is similar to the 2-dim case.
+\\
+
+So suppose we have a sequence of vectors
+\( \mathbf{e}_1, \ldots, \mathbf{e}_{n-1} \), these vectors are linearly independent and they are orthonormal, now I have a vector \( \mathbf{a}_n \) which is
+also linearly independent to these vectors, how can I find a vector \( \mathbf{e}_n \) that is orthonormal to \( \mathbf{e}_1, \ldots, \mathbf{e}_{n-1} \) and we also have
+span{(\( \mathbf{e}_1, \ldots, \mathbf{e}_n \))} = span{(\( \mathbf{e}_1, \ldots, \mathbf{e}_{n-1}, \mathbf{a}_n \))}?
+\\
+
+A natural idea is to throw away the part of \( \mathbf{a}_n \) that is in the span of \( \mathbf{e}_1, \ldots, \mathbf{e}_{n-1} \), as we know,
+\( \mathbf{a}_n \) can we written as \( \mathbf{v}_n + \mathbf{p_n} \), define the matrix \( A_{n-1} \) equals to \( \begin{bmatrix}
+    \mathbf{e}_1, \mathbf{e}_2, \ldots, \mathbf{e}_{n-1}
+\end{bmatrix} \)
+, then we can represent \( \mathbf{v}_n \) as \( \mathbf{v}_n = \mathbf{a}_n - A_{n-1}\mathbf{x} \), since \( \mathbf{v}_n \bot\ C(A_{n-1}) \), we know
+\( \mathbf{v}_n \in\ \mathbf{N}(A_{n-1}^T) \), then we have
+
+\[
+    \begin{split}
+        A_{n-1}^T\mathbf{v}_n =& A_{n-1}^T(\mathbf{a}_n - \mathbf{p}_n)  \\
+                        =& A_{n-1}^T(\mathbf{a}_n - A_{n-1}\mathbf{x}) \\
+                        =& 0
+    \end{split}
+\]
+
+Then we get \( \mathbf{x} = {(A_{n-1}^T A_{n-1})}^{-1} A_{n-1}^T \mathbf{a}_n\),
+and we get \( \mathbf{v}_n = \mathbf{a}_n - A_{n-1} {(A_{n-1}^T A_{n-1})}^{-1}A_{n-1}^T \mathbf{a}_n \).
+\\
+
+Remember that the matrix \( A_{n-1} \) is composed of orthonormal vectors, so \( A_{n-1}^T A_{n-1} = I \), then we have
+
+\[ 
+    \mathbf{v}_n = \mathbf{a}_n - A_{n-1} A_{n-1}^T \mathbf{a}_n  = \mathbf{a}_n - \mathbf{e}_1^T \mathbf{a}_n \mathbf{e}_1 - \mathbf{e}_2^T \mathbf{a}_n \mathbf{e}_2 - \cdots - \mathbf{e}_{n-1}^T \mathbf{a}_n \mathbf{e}_{n-1}
+\]
+
+if we want to do the normalization at the end, we can rewrite the above formula as below:
+
+\[
+    \mathbf{v}_n = \mathbf{a}_n - B_{n-1}{(B_{n-1}^T B_{n-1})}^{-1}B_{n-1}^T \mathbf{a}_n  = \mathbf{a}_n - \frac{\mathbf{u}_1^T \mathbf{a}_n}{\mathbf{u}_1^T \mathbf{u}_1} \mathbf{u}_1 - \frac{\mathbf{u}_2^T \mathbf{a}_n}{\mathbf{u}_2^T \mathbf{u}_2} \mathbf{u}_2 - \cdots - \frac{\mathbf{u}_{n-1}^T \mathbf{a}_n}{ \mathbf{u}_{n-1}^T \mathbf{u}_{n-1}} \mathbf{u}_{n-1}
+\]
+
+Here \( \mathbf{u}_i / || \mathbf{u}_i || = \mathbf{e}_i \), and matrix \( B_{n-1} \) is the matrix composed of \( \mathbf{u}_1, \ldots, \mathbf{u}_{n-1} \).
+
+\pagebreak
+
+\begin{homeworkProblem}
+
+If \( \mathbf{q}_1 \) and \( \mathbf{q}_2 \) are orthonormal vectors in \( \mathbf{R}^5 \),
+what combination \emptyunderline\( \mathbf{q}_1 \) + \emptyunderline\( \mathbf{q}_2 \) is closest
+to a given vector \( \mathbf{b} \)?
+\\
+
+\solution
+\\
+
+\(\underline{\mathbf{q}_1^T \mathbf{b}}\ \mathbf{q}_1 + \underline{\mathbf{q}_2^T \mathbf{b}}\ \mathbf{q}_2  \).
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    What multiple of \( \mathbf{a} = \begin{bmatrix}
+        1 \\
+        1
+    \end{bmatrix} \) should be subtracted from \( \mathbf{b} = \begin{bmatrix}
+        4   \\
+        0
+    \end{bmatrix} \)
+    to make the result \( \mathbf{B} \) orthogonal to \( \mathbf{a} \)? Sketch a figure
+    to show \( \mathbf{a}, \mathbf{b}\ \text{and}\ \mathbf{B} \).
+    \\
+
+    Complete the Gram-Schmidt process for this problem by computing
+    \( \mathbf{q}_1 = \mathbf{a} / || \mathbf{a} || \) and \( \mathbf{q}_2  = \mathbf{B} / || \mathbf{B} || \)
+    and factoring into \( QR \):
+
+    \[
+        \begin{bmatrix}
+            1   &   4   \\
+            1   &   0
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            \mathbf{q}_1 & \mathbf{q}_2
+        \end{bmatrix}
+        \begin{bmatrix}
+            || \mathbf{a} ||  & ? \\
+            || 0    ||  & || \mathbf{B} ||
+        \end{bmatrix}
+    \]
+
+    \solution
+    \\
+    
+    As shown at the beginning of this homework, we can get \( \mathbf{B} \) as below:
+
+    \[
+        \mathbf{B} = \mathbf{b} - \frac{\mathbf{a}^T \mathbf{b}}{\mathbf{a}^T \mathbf{a}} \mathbf{a} = \begin{bmatrix}
+            2 \\
+            -2
+        \end{bmatrix}
+    \]
+
+    The multiple of \( \mathbf{a} \) that should be subtracted from \( \mathbf{b} \) is 2.
+
+    The picture is shown below:
+
+\[
+    \begin{tikzpicture}[->,thick]
+        \draw[color=black] (0, 0) -- (1, 1);
+        \draw[color=black] (0,0) -- (4,0);
+        \draw[color=black] (0,0) -- (2,-2);
+
+            \node[above right] at (1, 1) {$\mathbf{a}$};
+    \node[right] at (4, 0) {$\mathbf{b}$};
+    \node[below right] at (2, -2) {$\mathbf{B}$};
+    \end{tikzpicture}
+\]
+
+After computation we get \( \mathbf{q}_1 = \begin{bmatrix}
+    1 / \sqrt{2} \\
+    1 / \sqrt{2}
+\end{bmatrix} \)
+,
+\( \mathbf{q}_2 = \begin{bmatrix}
+    1 / \sqrt{2} \\
+    -1 / \sqrt{2}
+    \end{bmatrix}
+\), then we have \( QR \) decomposition of the matrix \( A \):
+\\
+
+\[
+    A = \begin{bmatrix}
+        1   &   4   \\
+        1   &   0
+    \end{bmatrix} = \begin{bmatrix}
+        1 / \sqrt{2} & 1 / \sqrt{2} \\
+        1 / \sqrt{2} & -1 / \sqrt{2}
+    \end{bmatrix}
+    \begin{bmatrix}
+        \sqrt{2}    &   2\sqrt{2}   \\
+        0   &   2\sqrt{2}
+    \end{bmatrix}
+\]
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Find \( \mathbf{q}_1, \mathbf{q}_2, \mathbf{q}_3 \) (orthonormal) as combinations of \( \mathbf{a}, \mathbf{b}, \mathbf{c} \)
+    (independent columns). Then write \( A \) as \( QR \):
+    \[
+        A = \begin{bmatrix}
+            1 & 2 & 4   \\
+            0 & 0 & 5   \\
+            0 & 3 & 6
+        \end{bmatrix}
+    \]
+
+    \solution
+    \\
+
+    \( \mathbf{q}_1, \mathbf{q}_2, \mathbf{q}_3 \) are shown below:
+
+    \[
+        \begin{split}
+            \mathbf{q}_1 =& \mathbf{a} = \begin{bmatrix}
+                1 & 0 & 0
+            \end{bmatrix}^T \\
+            \mathbf{q}_2 =& (\mathbf{b} - \mathbf{q}_1^T \mathbf{b} \mathbf{q}_1) / || \mathbf{b} - \mathbf{q}_1^T \mathbf{b} \mathbf{q}_1 || = \begin{bmatrix} 0 & 0 & 1 \end{bmatrix}^T \\
+            \mathbf{q}_3 =& (\mathbf{c} - \mathbf{q}_1^T \mathbf{c} \mathbf{q}_1 - \mathbf{q}_2^T \mathbf{c} \mathbf{q}_2) / || \mathbf{c} - \mathbf{q}_1^T \mathbf{c} \mathbf{q}_1 - \mathbf{q}_2^T \mathbf{c} \mathbf{q}_2 || = \begin{bmatrix} 0 & 1 & 0 \end{bmatrix}^T
+        \end{split}
+    \]
+
+and then we can get the \( QR \) decomposition of the matrix \( A \):
+
+\[
+        A = \begin{bmatrix}
+            1 & 2 & 4   \\
+            0 & 0 & 5   \\
+            0 & 3 & 6
+        \end{bmatrix} = \begin{bmatrix}
+            1 & 0 & 0   \\
+            0 & 0 & 1   \\
+            0 & 1 & 0
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & 2 & 4   \\
+            0 & 3 & 6   \\
+            0 & 0 & 5
+        \end{bmatrix}
+\]
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Choose \( c \) so that \( Q \) is an orthogonal matrix:
+   
+    \[
+        Q = c\begin{bmatrix}
+            1 & -1 & -1 & -1    \\
+            -1 & 1 & -1 & -1    \\
+            -1 & -1 & 1 & -1    \\
+            -1 & -1 & -1 & 1
+        \end{bmatrix}
+    \]
+
+    Project \( \mathbf{b} \) = (1, 1, 1, 1) onto the first column. Then
+    project \( \mathbf{b} \) onto the plane of the first two columns.
+    \\
+
+    \solution
+
+    \begin{enumerate}
+        \item \( c = 1 / 2 \).
+        \item The projection of \( \mathbf{b} \) onto the first column \( \mathbf{p} = \begin{bmatrix}
+            -1/2 & 1/2 & 1/2 & 1/2
+        \end{bmatrix}^T \).
+        \item The projection of \( \mathbf{b} \) onto the first two columns is \( \mathbf{p} = \begin{bmatrix} 
+            0 & 0 & 1 & 1
+        \end{bmatrix}^T \).
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    If you add row 1 = \( \begin{bmatrix}
+        a & b & c
+    \end{bmatrix} \) to row 2 \( \begin{bmatrix}
+        p & q & r
+    \end{bmatrix} \)
+    to get \( \begin{bmatrix}
+        p + a & q + b & r + c   \\
+    \end{bmatrix} \)
+    in row 2, show from formula{(1)} for \( \det A \) that the 3 by 3
+    determinant does not change. Here is another approach to the rule for adding
+    two rows:
+
+    \[
+        \det \begin{bmatrix}
+            \text{row 1}    \\
+            \textbf{row1 + row2}    \\
+            \text{row 3}
+        \end{bmatrix}
+        =
+        \det \begin{bmatrix}
+            \text{row 1}    \\
+            \textbf{row 1}    \\
+            \text{row 3}
+        \end{bmatrix}
+        +
+        \det \begin{bmatrix}
+            \text{row 1}    \\
+            \textbf{row 2}    \\
+            \text{row 3}
+        \end{bmatrix}
+        =
+        \mathbf{0}
+        +
+        \det \begin{bmatrix}
+            \text{row 1}    \\
+            \text{row 2}    \\
+            \text{row 3}
+        \end{bmatrix}
+    \]
+
+    \solution
+
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Do these martices have determinant 0,1,2, or 3?
+    
+    \[
+        A = \begin{bmatrix}
+            0 & 0 & 1   \\
+            1 & 0 & 0   \\
+            0 & 1 & 0
+        \end{bmatrix}
+        \ \ \ 
+        B = \begin{bmatrix}
+            0 & 1 & 1   \\
+            1 & 0 & 1   \\
+            1 & 1 & 0
+        \end{bmatrix}
+        \ \ \ 
+        C = \begin{bmatrix}
+            1 & 1 & 1   \\
+            1 & 1 & 1   \\
+            1 & 1 & 1
+        \end{bmatrix}
+        \ \ \ 
+        D = \begin{bmatrix}
+            1 & 1 & 1   \\
+            0 & 1 & 0   \\
+            1 & 1 & 1
+        \end{bmatrix}
+    \]
+
+    \solution
+
+    \begin{enumerate}
+        \item \( \det A = 1 \).
+        \item \( \det B = 2 \).
+        \item \( \det C = 0 \).
+        \item \( \det D = 0 \).
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Show that \( \det A = 0 \), regardless of the five numbers marked by \( x \)'s:
+
+    \[
+        A = \begin{bmatrix}
+            x & x & x   \\
+            0 & 0 & x   \\
+            0 & 0 & x
+        \end{bmatrix}
+    \]
+    \\
+
+    What are the cofactors of row 1? What is the rank of \( A \)? 
+    What are the 6 terms in \( \det A \)?
+    \\
+
+    \solution
+
+    \begin{enumerate}
+        \item The corresponding cofactor matrix is: \( \begin{bmatrix}
+            0 & 0 & 0   \\
+            -x^2 & x^2 & 0   \\
+            x^2 & -x^2 & 0 
+        \end{bmatrix} \).
+        \item If \( x \neq 0 \), the rank of \( A \) is 2, otherwise the rank of \( A \) is 0.
+        \item The 6 terms in \( \det A \) are all zero.
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Quick proof of Cramer's rule. The determinant is a linear function
+    of column 1. It is zero if two columns are equal. When \( \mathbf{b} = A \mathbf{x} = x_1\mathbf{a}_1 + x_2\mathbf{a}_2 + x_3\mathbf{a}_3\) goes into the first column of
+    \( A \), we have the matrix \( B_1 \) and Cramer's Rule \( x_1 = \det B_1 / \det A \):
+
+    \[
+        | \mathbf{b}\ \ \mathbf{a}_2\ \ \mathbf{a}_3 | = |x_1\mathbf{a}_1 + x_2\mathbf{a}_2 + x_3\mathbf{a}_3\ \ \mathbf{a}_2\ \ \mathbf{a}_3|
+        = x_1|\mathbf{a}_1\ \ \mathbf{a}_2\ \ \mathbf{a}_3| = x_1 \det A.
+    \]
+
+    What steps lead to the middle equation?
+    \\
+
+    \solution
+
+    \[  
+        \begin{split}
+            | \mathbf{b}\ \ \mathbf{a}_2\ \ \mathbf{a}_3 | =& |x_1\mathbf{a}_1 + x_2\mathbf{a}_2 + x_3\mathbf{a}_3\ \ \mathbf{a}_2\ \ \mathbf{a}_3|  \\
+            =& |x_1 \mathbf{a}_1\ \ \mathbf{a}_2\ \ \mathbf{a}_3| + |x_2\mathbf{a}_2\ \ \mathbf{a}_2\ \ \mathbf{a}_3| + |x_3\mathbf{a}_3\ \ \mathbf{a}_2\ \ \mathbf{a}_3|   \\
+            =& x_1|\mathbf{a}_1\ \ \mathbf{a}_2\ \ \mathbf{a}_3| + x_2|\mathbf{a}_2\ \ \mathbf{a}_2\ \ \mathbf{a}_3| + x_3|\mathbf{a}_3\ \ \mathbf{a}_2\ \ \mathbf{a}_3|
+        \end{split}
+    \]
+
+    Using the fact that the determinant is zero if two columns are equal, we then have
+    \( |\mathbf{b}\ \ \mathbf{a}_2\ \ \mathbf{a}_3| = x_1\det A\).
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    (prize for the max determinant) If a 3 by 3 matrix has entries 1,2,3,4, \ldots ,9, what is the
+    maximum determinant? I would use a computer to decide. This problem does not seem easy.
+    \\
+
+    \solution
+
+    \[
+        \begin{bmatrix}
+            1 & 7 & 6   \\
+            4 & 0 & 8   \\
+            9 & 5 & 2
+        \end{bmatrix}
+    \]
+
+    The code is shown below:
+
+\begin{lstlisting}[language=Python]
+import numpy
+import itertools
+
+max = 0
+
+for p in itertools.permutations(range(0,10)):
+    matrix = [p[0:3], p[3:6], p[6:9]]
+    temp = abs(numpy.linalg.det(matrix))
+    if temp > max:
+        max = temp
+        solution = matrix
+
+print(solution)
+\end{lstlisting}
+
+\end{homeworkProblem}
+
+\end{document}

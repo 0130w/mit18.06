@@ -4,15 +4,19 @@ This repo contains my solutions of mit18.06 Problem Sets.
 
 If you find any errors, feel free to raise an issue and I'll check and correct them the first time I see them.
 
-related link: [mit 18.06](https://github.com/mitmath/1806)
+related link: 
 
-## TODO
+[mit 18.06](https://github.com/mitmath/1806)
 
-- [x] HW01
-- [x] HW02
-- [x] HW03
-- [x] HW04
-- [ ] HW05
-- [ ] HW06
-- [ ] HW07
-- [ ] HW08
+[latex-template](https://github.com/jdavis/latex-homework-template)
+
+## TODO-List
+
+- [x] ProblemSet 01
+- [x] ProblemSet 02
+- [x] ProblemSet 03
+- [x] ProblemSet 04
+- [x] ProblemSet 05 (contains the detail of the Gram-Schmidt process)
+- [ ] ProblemSet 06
+- [ ] ProblemSet 07
+- [ ] ProblemSet 08

@@ -557,9 +557,9 @@ and then we can get the \( QR \) decomposition of the matrix \( A \):
 
     \[
         \begin{bmatrix}
-            1 & 7 & 6   \\
-            4 & 0 & 8   \\
-            9 & 5 & 2
+            1 & 5 & 7   \\
+            4 & 9 & 2   \\
+            8 & 3 & 6
         \end{bmatrix}
     \]
 
@@ -571,7 +571,7 @@ import itertools
 
 max = 0
 
-for p in itertools.permutations(range(0,10)):
+for p in itertools.permutations(range(1,10)):
     matrix = [p[0:3], p[3:6], p[6:9]]
     temp = abs(numpy.linalg.det(matrix))
     if temp > max:

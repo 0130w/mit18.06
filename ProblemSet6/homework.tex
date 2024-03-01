@@ -1,0 +1,551 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{boondox-cal}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{listings}
+\usepackage{algpseudocode}
+
+\usetikzlibrary{automata,positioning, arrows.meta}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\ (\hmwkClassInstructor): \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#6}
+\newcommand{\hmwkDueDate}{March 2, 2024}
+\newcommand{\hmwkClass}{Linear Algebra}
+\newcommand{\hmwkClassInstructor}{Gilbert Strang}
+\newcommand{\hmwkAuthorName}{\textbf{0130}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \vspace{0.1in}\large{\textit{\hmwkClassInstructor}}
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+% empty underline
+\newcommand{\emptyunderline}{\underline{\ \ \ \ \ \ }}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+
+    The example at the start of the chapter has powers of this matrix \( A \):
+    \[
+        A = \begin{bmatrix}
+            .8 & .3 \\
+            .2 & .7
+        \end{bmatrix}
+        \ \ \ 
+        \text{and}
+        A^2 = \begin{bmatrix}
+            .70 & .45   \\
+            .30 & .55
+        \end{bmatrix}
+        \ \ \ 
+        \text{and}
+        \ \ \ 
+        A^\infty = \begin{bmatrix}
+            .6 & .6 \\
+            .4 & .4
+        \end{bmatrix}
+        .
+    \]
+
+    Find the eigenvalues of these matrices. All powers have the same eigenvectors.
+    Show from \( A \) how a row exchange can produce different eigenvalues.
+    \\
+
+    \solution
+
+    \begin{enumerate}
+        \item The eigenvalues of \( A \) are: \( 1/2, 1 \).
+        \item The eigenvalues of \( A^2 \) are: \( 1/4, 1 \).
+        \item The eigenvalues of \( A^\infty \) of \( 0, 1 \).
+    \end{enumerate}
+
+    If we exchange two rows of \( A \), then the eigenvalues of the resulting matrix will be:
+    \( -1/2, 1 \).
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Find three eigenvectors for this matrix \( P \) (projection matrices have \( \lambda = 1 \) and 0):
+
+    \[
+        \textbf{Projection matrix}
+        \ \ \ \ \ \ 
+        P = \begin{bmatrix}
+            .2 & .4 & 0 \\
+            .4 & .8 & 0 \\
+            0 & 0 & 1
+        \end{bmatrix}
+    \]
+
+    If two eigenvectors share the same \( \lambda \), so do all their linear combinations. Find
+    an eigenvector of \( P \) with no zero components.
+    \\
+
+    \solution
+    \\
+
+    The eigenvectors corresponding to the eigenvalue \( \lambda = 1 \) are: \( \begin{bmatrix}
+        1 & 2 & 0
+    \end{bmatrix}^T \) and \(
+    \begin{bmatrix}
+        0 & 0 & 1
+    \end{bmatrix}^T \). The eigenvector corresponding to the eigenvalue \( \lambda = 0 \) is: \( \begin{bmatrix}
+        -2 & 1 & 0
+    \end{bmatrix}^T \).
+    \\
+
+    A eigenvector of \( P \) with no zero components is: \( \begin{bmatrix}
+        1 & 2 & 1 
+    \end{bmatrix}^T \).
+    
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    A 3 by 3 matrix \( B \) is known to have eigenvalues 0,1,2. This information is enough to find
+    three of these (give the answer where possible):
+
+    \begin{enumerate}
+        \item the rank of \( B \)
+        \item the determinant of \( B^T B \)
+        \item the eigenvalues of \( B^T B \)
+        \item the eigenvalues of \( {(B^2 + I)}^{-1} \)
+    \end{enumerate}
+
+    \solution
+    
+    \begin{enumerate}
+        \item The rank of \( B \) is 3.
+        \item The determinant of \( B^T B \) is \( 0 \).
+        \item The eigenvalues of \( B^T B \) are unknown.
+        \item The eigenvalues of \( {(B^2 + I)}^{-1} \) are 1, 1/2, 1/5.
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    The matrix is singular with rank one. Find three \( \lambda \)'s and three eigenvectors:
+
+    \[
+        A = \begin{bmatrix}
+            1 \\ 2 \\ 1 \\
+        \end{bmatrix}
+        \begin{bmatrix}
+            2 & 1 & 2
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            2 & 1 & 2   \\
+            4 & 2 & 4   \\
+            2 & 1 & 2
+        \end{bmatrix}
+    \]
+
+    \solution
+    \\
+
+    Three eigenvalues are 0, 0, 6. The corresponding eigenvectors are:
+    \( \begin{bmatrix}
+        -1 & 2 & 0
+    \end{bmatrix}^T
+    \), \(
+    \begin{bmatrix}
+        1 & 0 & -1
+    \end{bmatrix}^T
+    \) and
+    \( \begin{bmatrix}
+        1 & 2 & 1
+    \end{bmatrix}^T \).
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Find the rank and the four eigenvalues of \( A \) and \( C \):
+
+    \[
+        A = \begin{bmatrix}
+            1 & 1 & 1 & 1 \\
+            1 & 1 & 1 & 1 \\
+            1 & 1 & 1 & 1 \\
+            1 & 1 & 1 & 1
+        \end{bmatrix}
+        \ \ 
+        \text{and}
+        \ \ 
+        C = 
+        \begin{bmatrix}
+            1 & 0 & 1 & 0   \\
+            0 & 1 & 0 & 1   \\
+            1 & 0 & 1 & 0   \\
+            0 & 1 & 0 & 1
+        \end{bmatrix}.
+    \]
+
+    \solution
+    \\
+    
+    \begin{enumerate}
+        \item The rank of \( A \) is zero, the eigenvalues are 0, 0, 0, 4.
+        \item The rank of \( C \) is 2, the eigenvalues are 0, 0, 2, 2.
+    \end{enumerate}
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Suppose \( A \) has eigenvalues 0,3,5 with independent eigenvectors \( \mathbf{u}, \mathbf{v}, \mathbf{w} \).
+    \begin{enumerate}
+        \item Give a basis for the nullspace and a basis for the column space.
+        \item Find a particular solution to \( A\mathbf{x} = \mathbf{v} + \mathbf{w} \). Find all solutions.
+        \item \( A\mathbf{x} = \mathbf{u} \) has no solution. If it did then \emptyunderline\ would be in the column space.
+    \end{enumerate}
+
+    \solution
+
+    \begin{enumerate}
+        \item A basis for the nullspace is \( \mathbf{u} \),a basis for the column space is \( \left\{ \mathbf{v}, \mathbf{w} \right\} \).
+        \item A particular solution to \( A\mathbf{x} = \mathbf{v} + \mathbf{w} \) is \( \mathbf{x^*} = 1/3 \mathbf{v} + 1/5 \mathbf{w} \) and all solutions have the form \( \mathbf{x} = c\mathbf{u} + 1/3\mathbf{v} + 1/5\mathbf{w},\ c \in \mathbb{R} \).
+        \item \( a\mathbf{v} + b\mathbf{w} \in\ C(A), a,b \in \mathbb{R} \).
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    \begin{enumerate}
+        \item Factor these two matrices into \( A = X\Lambda X^{-1} \):
+        \[
+            A = \begin{bmatrix}
+                1 & 2   \\
+                0 & 3
+            \end{bmatrix}
+            \ \ \ \ \ \ 
+            \text{and}
+            \ \ \ \ \ \ 
+            A = \begin{bmatrix}
+                1 & 1   \\
+                3 & 3   
+            \end{bmatrix}
+        \]
+        \item If \( A = X\Lambda X^{-1} \) then \( A^3 = (\ )(\ )(\ ) \) and \( A^{-1} = (\ )(\ )(\ ) \).
+    \end{enumerate}
+
+    \solution
+
+    \begin{enumerate}
+        \item The factorization of first \( A = \begin{bmatrix}
+            1 & 2   \\
+            0 & 3
+        \end{bmatrix} \) is \( A = \begin{bmatrix}
+            1 & 1   \\
+            0 & 1
+        \end{bmatrix} 
+        \begin{bmatrix}
+            1 & 0   \\
+            0 & 3
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & -1   \\
+            0 & 1
+        \end{bmatrix}
+        \), the factorization of second \( A = \begin{bmatrix}
+            1 & 1   \\
+            3 & 3
+        \end{bmatrix} \)
+        =
+        \(
+        \begin{bmatrix}
+            -1 & 1   \\
+            1 & 3
+        \end{bmatrix}
+        \begin{bmatrix}
+            0 & 0   \\
+            0 & 4
+        \end{bmatrix}
+        \begin{bmatrix}
+            -3/4 & 1/4   \\
+            1/4 & 1/4
+        \end{bmatrix}
+        \).
+    \item \( A^3 = X\Lambda^3 X^{-1} \), \( A^{-1} = X\Lambda^{-1}X^{-1} \).
+    \end{enumerate}
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    True or false: If the column of \( X \) (eigenvectors of \( A \)) are linearly independent, then
+    
+    \begin{enumerate}
+        \item A is invertible.
+        \item A is diagonalizable.
+        \item X is invertible.
+        \item X is diagonalizable.
+    \end{enumerate}
+
+    \solution
+
+    \begin{enumerate}
+        \item False. Consider \( \textbf{Problem 6} \).
+        \item True.
+        \item True.
+        \item True.
+    \end{enumerate}
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+   \( A^k = X\Lambda^k X^{-1} \) approaches the zero matrix as \( k \to \infty \)
+   if and only if every \( \lambda \) has absolute value less than \emptyunderline\ .
+   Which of these matrices has \( A^k \to 0 \)?
+
+   \[
+        A_1 = \begin{bmatrix}
+            .6 & .9 \\
+            .4 & .1
+        \end{bmatrix}
+        \ \ \ 
+        \text{and}
+        \ \ \ 
+        A_2 = \begin{bmatrix}
+            .6 & .9 \\
+            .1 & .6
+        \end{bmatrix}
+        .
+   \]
+
+   (Recommended) Find \( \Lambda \) and \( X \) to diagonalize \( A_1 \) in the above
+   problem. What is the limit of \( \Lambda^k \) as \( k \to \infty \)? In the
+   columns of this limiting matrix you see the \emptyunderline.
+    \\
+
+    \solution
+
+    \begin{enumerate}
+        \item \( |\lambda| < 1 \).
+        \item The eigenvalues of \( A_1 \) are 1 and -0.3, the eigenvalues of \( A_2 \) are \( \frac{6 + \sqrt{11}}{10}, \frac{6-\sqrt{11}}{10} \), since
+        the absolute value of the eigenvalues of \( A_2 \) are less than 1, we know \( A_2^k \to 0, k \to \infty \).
+        \item \( A_1 \) can be diagonalized as \( A_1 = \begin{bmatrix}
+            9 & -1  \\
+            4 & 3
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & 0   \\
+            0 & -0.3
+        \end{bmatrix} 
+        \begin{bmatrix}
+            1/13 & 1/13 \\
+            -4/13 & 9/13
+        \end{bmatrix} 
+        \), \( \Lambda^k \to \begin{bmatrix}
+            1 & 0   \\
+            0 & 0
+        \end{bmatrix} \)
+        \\
+
+        the columns with eigenvalues less than 1
+        become the zero columns.
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Show that trace \( XY = \text{trace} YX \) by adding the diagonal entries of \( XY \) and \( YX \):
+
+    \[
+        X = \begin{bmatrix}
+            a & b \\
+            c & d
+        \end{bmatrix}
+        \ \ \ \ \ \ 
+        \text{and}
+        \ \ \ \ \ \ 
+        Y = \begin{bmatrix}
+            q & r \\
+            s & t
+        \end{bmatrix}
+    \]
+
+    Now choose \( Y \) to be \( \Lambda X^{-1} \). Then \( X\Lambda X^{-1} \) has the same trace 
+    as \( \Lambda X^{-1} X = \Lambda \). This proves that
+    the trace of \( A \) equals the trace of \( \Lambda = \text{the sum of the eigenvalues} \).
+    \( \mathbf{AB\ -\ BA = I}\ \textbf{is impossible} \) since the left side has trace \emptyunderline.
+    \\
+
+    \solution
+
+    \begin{enumerate}
+        \item \( {(XY)}_{11} + {(XY)}_{22} = (aq + bs) + (cr + dt) = (qa + rc) + (sb + td) = {(YX)}_{11} + {(YX)}_{22} \)
+        \item 0.
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    \begin{enumerate}
+        \item If \( A = \begin{bmatrix}
+            a & b   \\
+            0 & d
+        \end{bmatrix} \) then the determinant of 
+        \( A - \lambda I \) is \( (\lambda - a)(\lambda - d) \). Check the "Cayley-Hamilton Theorem"
+        that \( (A - aI)(A - dI) = \text{zero matrix} \).
+        \item Test the Cayley-Hamilton Theorem on Fibonacci's \( A = \begin{bmatrix}
+            1 & 1   \\
+            1 & 0
+        \end{bmatrix} \). The theorem predicts
+        that \( A^2 - A - I = 0 \), since the polynomial \( \det (A-\lambda I)\ \text{is}\ \lambda^2 - \lambda - 1 \).
+        \\
+
+        \solution
+
+        \begin{enumerate}
+            \item \( (A - aI)(A - dI) = \begin{bmatrix}
+                0 & b   \\
+                0 & d - a
+            \end{bmatrix}
+            \begin{bmatrix}
+                a - d & b   \\
+                0 & 0
+            \end{bmatrix}
+            = \mathbf{0}
+            \).
+            \item The characteristic polynomial of Fibonacci matrix is \( \lambda^2 - \lambda - 1 = 0 \), we have
+            \[
+                A^2 - A - I = \begin{bmatrix}
+                    2 & 1   \\
+                    1 & 1
+                \end{bmatrix}
+                -
+                \begin{bmatrix}
+                    1 & 1  \\
+                    1 & 0
+                \end{bmatrix}
+                -
+                \begin{bmatrix}
+                    1 & 0   \\
+                    0 & 1
+                \end{bmatrix}
+                =
+                \begin{bmatrix}
+                    0 & 0   \\
+                    0 & 0
+                \end{bmatrix}
+            \]
+
+            The result checks the Cayley-Hamilton Theorem is true.
+        \end{enumerate}
+    \end{enumerate}
+\end{homeworkProblem}
+
+\end{document}

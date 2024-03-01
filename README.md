@@ -19,6 +19,6 @@ related link:
 - [x] ProblemSet 03
 - [x] ProblemSet 04
 - [x] ProblemSet 05 (contains the detail of the Gram-Schmidt process)
-- [ ] ProblemSet 06
+- [x] ProblemSet 06
 - [ ] ProblemSet 07
 - [ ] ProblemSet 08

@@ -1,0 +1,601 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{boondox-cal}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{listings}
+\usepackage{algpseudocode}
+
+\usetikzlibrary{automata,positioning, arrows.meta}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\ (\hmwkClassInstructor): \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#7}
+\newcommand{\hmwkDueDate}{March 6, 2024}
+\newcommand{\hmwkClass}{Linear Algebra}
+\newcommand{\hmwkClassInstructor}{Gilbert Strang}
+\newcommand{\hmwkAuthorName}{\textbf{0130}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \vspace{0.1in}\large{\textit{\hmwkClassInstructor}}
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+% empty underline
+\newcommand{\emptyunderline}{\underline{\ \ \ \ \ \ }}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+The lectures from 18 to 28 contains a lot of information, so
+before we start the homework, let's give a quick review of those stuffs.
+\\
+
+\textbf{First of all}, let's talk about difference equations. The question is, given \( u_0 \), and the recursive formula \( u_{k+1} = Au_{k} \), how can I compute \( u_k \)?
+
+Suppose that \( A \) is diagonalizable, this means that the eigenvectors \( x_1, x_2, \ldots, x_n \) of \( A \) is a basis of the whole space, so we can project \( u_0 \) onto the space spanned by these eigenvectors:
+
+\[
+    u_0 = c_1x_1 + c_2x_2 + \cdots + c_nx_n
+\]
+
+using the fact that \( Ax_i = \lambda_i x_i \), we have
+
+\[
+    u_k = A^k u_0 = c_1{\lambda_1^k}x_1 + c_2{\lambda_2^k}x_2 + \cdots + c_n{\lambda_n^k}x_n
+\]
+
+a very interesting example is the Fibonacci sequence \( F_{n+1} = F_{n} + F_{n-1} \), a trick to solve this is to add a equation \( F_n = F_n \) and
+define \( u_k = \begin{bmatrix}
+    F_{k+1} \\
+    F_k
+\end{bmatrix} \) and \( A = \begin{bmatrix}
+    1 & 1 \\
+    1 & 0
+\end{bmatrix} \), then we have \( u_{k+1} = Au_k \), and we can compute \( u_k \) using the method above.
+\\
+
+\textbf{Secondly}, let's talk about the differential equations. What we are considering is the equation \( u' = Au \), 
+projecting \( u \) onto the space spanned by the eigenvectors of \( A \), we then have \( u = Sv \), the differential equation becomes
+\( Sv' = ASv \), multiplying \( S^{-1} \) on both sides, we have \( v' = S^{-1}ASv = \Lambda v \), and the solution of \( v' = \Lambda v \) is
+\( v = e^{\Lambda t}v(0) \), where the exponential of a matrix is defined as \( e^A := \sum_{k=0}^{\infty} \frac{1}{k!} A^k \), and the form of \( e^{\Lambda t} \) is very
+simple: 
+
+\[ e^{\Lambda t} = \begin{bmatrix}
+    e^{\lambda_1 t} & 0 & \cdots & 0 \\
+    0 & e^{\lambda_2 t} & \cdots & 0 \\
+    \vdots & \vdots & \ddots & \vdots \\
+    0 & 0 & \cdots & e^{\lambda_n t}
+\end{bmatrix} 
+\]
+
+and we have \( u = S e^{\Lambda t} v(0) = S e^{\Lambda t} S^{-1} u(0) = e^{At} u(0) \).
+
+Now consider the two order differential equation, for example, 
+\(
+        y'' + by' + ky = 0  \\
+\)
+
+using the same trick in difference equations, we can add an equation \( y' = y' \), then we have
+
+\[
+    \begin{cases}
+        y'' + by' + ky = 0  \\
+        y' = y'
+    \end{cases}
+    \overset{u = \begin{bmatrix}
+        y' \\
+        y
+    \end{bmatrix}}{\Longrightarrow}
+    u' = \begin{bmatrix}
+        -b & -k \\
+        1 & 0
+    \end{bmatrix}u
+\]
+\\
+
+then we can solve this using the method above.
+\\
+
+\textbf{Thirdly}, let's talk about Markov matrices, the special properties of Markov matrices are:
+
+\begin{enumerate}
+    \item Every entry is non-negative.
+    \item Every column sums to 1.
+\end{enumerate}
+
+Markov matrices have a very special property: it has an eigenvalue 1, this can be proved by the fact that the sum of every column is 1, so if we consider the matrix \( A - I \), this matrix has the property that every column sums to 0, then we have \( (A-I) \begin{bmatrix}
+    1 \\
+    1 \\
+    \vdots \\
+    1
+\end{bmatrix} = 0 \Rightarrow A\begin{bmatrix}
+    1 \\
+    1 \\
+    \vdots \\
+    1
+\end{bmatrix} = \begin{bmatrix}
+    1 \\
+    1 \\
+    \vdots \\
+    1
+\end{bmatrix}\). This property can be used to calculate the eigenvalues of Markov matrices.
+\\
+
+\textbf{The last thing} of the application of eigenvalues and eigenvectors we need to talk about is Fourier series,
+instead of considering the traditional vector space, we consider the space of functions, and the basis of this space is \( 1, \cos x, \sin x, \cos 2x, \sin 2x, 
+\cdots, \cos nx, \sin nx, \cdots \), what we are trying to do is to project a function onto this space, so we are trying to rewrite function \( f(x) \) as:
+\[
+    f(x) = a_0 + a_1\cos x + b_1\sin x + a_2\cos 2x + b_2\sin 2x + \cdots + a_n\cos nx + b_n\sin nx + \cdots
+\]
+
+and the great property of this basis is that they are orthogonal (the inner product of two functions \( f(x) \text{ and } g(x) \) is \( \int_{0}^{2\pi} f(x)g(x)dx \))
+, and then if we want to determine the value of parameters, for example, \( a_2 \), we can do inner product with \( \cos 2x \) on both sides, then we have:
+
+\[
+    \int_{0}^{2\pi} f(x)\cos 2x dx = a_2 \int_{0}^{2\pi} \cos^2 2x dx \Rightarrow a_2 = \frac{1}{\pi} \int_{0}^{2\pi} f(x) \cos 2x dx
+\]
+\\
+
+After talking about the applications of eigenvalues and eigenvectors, we are going to talk about the eigenvalues and eigenvectors of real symmetric matrices, they have special properties:
+
+\begin{enumerate}
+    \item All eigenvalues are real.
+    \item Eigenvectors can be chosen to be orthogonal.
+\end{enumerate}
+
+futher more, we can require the eigenvectors to be orthonormal, then we have \( QQ^T = I \) where \( Q \) is orthonormal eigenvector matrix, then we can decompose \( A \) into \( A = Q\Lambda Q^T \) and this is called \textbf{spectrum theorem}.
+\\
+
+What we are talking above is the case that the matrix is real, but what if the matrix is complex? Can we decompose \( A \) into a similar form?
+The answer is: if \( A = A^H \) where \( A^H = \bar{A}^T \), then there exists a unitary matrix \( U \) such that \( A = U\Lambda U^H \), and the eigenvalues are still real. (Unitary martix means \( U^H U = I \))
+\\
+
+Since we already talked about the complex matrices, we can think of the Fast Fourier Transform (\textbf{FFT}), in previous discussion, in order to compute the coefficients, for example, \( a_2 \), we need to compute the integral:
+\( a_2 = \frac{1}{\pi} \int_{0}^{2\pi} f(x)\cos 2x dx \) which is very time-consuming, in practice, we use Distributed Fourier Transform (\textbf{DFT}) to fit the result of these coefficients, let \( F_k = \pi(a_k + ib_k) \approx  \sum_{n=0}^{N-1} f(x_n)e^{-ik2\pi n/N} \),
+where \( x_k = \frac{2\pi k}{N} \), \( N \) is the number of sampled points, and \( f(x_k) \) is sampled value, we can see the time complexity is \( O(N^2) \) in order to compute \( n \) coefficients.
+Consider using FFT, define the Fourier matrix as below:
+\[  M_N = 
+    \begin{bmatrix}
+        1 & 1 & \cdots & 1 \\
+        1 & e^{-i2\pi/N} & \cdots & e^{-i2\pi(N-1)/N} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        1 & e^{-i2\pi(N-1)/N} & \cdots & e^{-i2\pi(N-1)(N-1)/N}
+    \end{bmatrix}
+\]
+
+where \( M_N(i,j) = e^{-i2\pi (i-1)(j-1) / N} \), then we have:
+\[
+    M_N \begin{bmatrix}
+        f(x_0) \\
+        f(x_1) \\
+        \vdots \\
+        f(x_{N-1})
+    \end{bmatrix} = \begin{bmatrix}
+        F_0 \\
+        F_1 \\
+        \vdots \\
+        F_{N-1}
+    \end{bmatrix}
+\]
+
+to reduce the times of multiplication, we can decompose \( M_N \) into \( M_N = \begin{bmatrix}
+    I & D_{N/2} \\
+    I & -D_{N/2}
+\end{bmatrix} \begin{bmatrix}
+    M_{N/2} & 0 \\
+    0 & M_{N/2}
+\end{bmatrix}
+\begin{bmatrix}
+    O_{N/2}    \\
+    E_{N/2}
+\end{bmatrix}
+\), where \( D_N = \begin{bmatrix}
+    1 & 0 & \cdots & 0 \\
+    0 & e^{-i2\pi/N} & \cdots & 0 \\
+    \vdots & \vdots & \ddots & \vdots \\
+    0 & 0 & \cdots & e^{-i2\pi(N-1)/N}
+\end{bmatrix} \), \( E_N \) is the matrix whose elements with even corner labels are all 1's while
+\( O_N \) is the matrix whose elements with odd corner labels are all 1's.
+Multiplying \( \begin{bmatrix} O_{N/2} \\E_{N/2} \end{bmatrix} \) costs little time since it just reshuffles the elements, multiplying the leftmost
+matrix costs \( O(N) \) time since there the special structure of the matrix \( D_N \). Then we can further decompose the intermediate matrices into smaller matrices and eventually we can reduce the time complexity to \( O(N\log N) \).
+\\
+
+Come back to real matrices, currently, we know that all eigenvalues are real, but are they positive or negative? A theorem tells us that \# positive pivots = \# positive eigenvalues, this is useful, for example, in differential equations, the postive eigenvalues means that the system is unstable.
+\\
+
+We are already to talk about positive definite matrices, the positive definite matrices are all symmetric matrices, and have one of the following properties (actually they are equivalent):
+
+\begin{enumerate}
+    \item All eigenvalues are positive.
+    \item All pivots are positive.
+    \item All sub-determinants (upper-left) are positive.
+    \item \( x^T A x > 0 \).
+\end{enumerate}
+
+and we call \( x^T A x \) the quadratic form of \( A \). Futher more, we know that if the Hessian of function \( f \) is positive-definite at \( x \), then \( f \)
+attains an isolated local minimum at \( x \).
+
+\begin{homeworkProblem}
+
+\begin{enumerate}
+    \item Find a symmetric matrix \( \begin{bmatrix}
+        1 & b   \\
+        b & 1
+    \end{bmatrix} \) that has a negative eigenvalue.
+    \item How do you know it must have a negative pivot?
+    \item How do you know it can't have two negative eigenvalues?
+\end{enumerate}
+
+\solution
+
+\begin{enumerate}
+    \item b = 2.
+    \item Because we know signs of pivots are the same as signs of eigenvalues.
+    \item Because the first pivot is positive.
+\end{enumerate}
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Every 2 by 2 symmetric matrix is \( \lambda_1 \mathbf{x}_1 \mathbf{x}_1^T + \lambda_2 \mathbf{x}_2 \mathbf{x}_2^T = \lambda_1 P_1 + \lambda_2 P_2 \).
+    
+    Explain \( P_1 + P_2 = \mathbf{x}_1 \mathbf{x}_1^T + \mathbf{x}_2\mathbf{x}_2^T = I \) from columns times rows of \( Q \). Why is \( P_1P_2 = 0 \)?
+    \\
+
+    \solution
+    \\
+
+    This is because if \( A \) is symmetric, we know that the eigenvectors can be chosen to be orthogonal, and then we can normalize these eigenvectors, then we have \( Q^T Q = I \) which is equivalent to \( P_1 + P_2  = \mathbf{x}_1 \mathbf{x}_1^T + \mathbf{x}_1 \mathbf{x}_2^T = I \).
+    \( P_1 P_2 \) is equal to \( \mathbf{x}_1 \mathbf{x}_1^T \mathbf{x}_2 \mathbf{x}_2^T \), since \( \mathbf{x}_1 \) and \( \mathbf{x}_2 \) are orthonormal, we know \( \mathbf{x}_1^T \mathbf{x}_2 = 0 \), therefore \( P_1 P_2 = 0 \).
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Show that this \( A \) (\textbf{symmetric but complex}) has only one line of eigenvectors:
+
+    \[
+        A = \begin{bmatrix}
+            i & 1 \\
+            1 & -i
+        \end{bmatrix} \text{is not even diagonalizable: eigenvalues}\ \lambda = 0, 0.
+    \]
+
+    \( A^T = A \) is not such a special property for complex matrices. The good property is \( A^H = A \).
+    Then all \( \lambda \)'s are real and the eigenvectors are orthogonal.
+    \\
+
+    \solution
+    \\
+
+    The characteristic polynomial of \( A \) is \( \det(A - \lambda I) = \lambda^2 \), so the eigenvalues of \( A \) is \( \lambda_1 = \lambda_2 = 0 \), using the elimination method, we can find that the only eigenvector of \( A \) is:
+    \( \begin{bmatrix}
+        i & 1
+    \end{bmatrix}^T \).
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Write a 2 by 2 complex matrix with \( S^H = S \) (a ``Hermitian matrix''). Find \( \lambda_1 \) and \( \lambda_2 \) for your complex matrix. Check
+    that \( \mathbf{x}_1^H\mathbf{x}_2 = 0 \) (this is complex orthogonality).
+    \\
+
+    \solution
+    \\
+
+    Consider \( S = \begin{bmatrix}
+        1 & -2i \\
+        2i & 1
+    \end{bmatrix} \), the characteristic polynomial of \( S \) is \( \det(S - \lambda I) = 
+    \lambda^2 - 2\lambda - 3\), and we find the eigenvalues are \( \lambda_1 = 3, \lambda_2 = -1 \), \( \mathbf{x}_1  = \begin{bmatrix}
+        -i & 1  \\
+    \end{bmatrix}^T, \mathbf{x}_2 = \begin{bmatrix}
+        i & 1
+    \end{bmatrix}^T\), then we have \( \mathbf{x}_1^H \mathbf{x}_2 = \begin{bmatrix}
+        i & 1
+    \end{bmatrix}\begin{bmatrix}
+        i \\
+        1
+    \end{bmatrix} = 0 \).
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    \textbf{True} (with reason) \textbf{or false} (with example).
+    \begin{enumerate}
+        \item A matrix with \( n \) real eigenvalues and \( n \) real eigenvectors is symmetric.
+        \item A matrix with \( n \) real eigenvalues and \( n \) orthonormal eigenvectors is symmetric.
+        \item The inverse of an invertible symmetric matrix is symmetric.
+        \item The eigenvector matrix \( Q \) of a symmetric matrix is symmetric.
+        \item The main diagonal of a positive definite matrix is all positive.
+    \end{enumerate}
+
+    \solution
+
+    \begin{enumerate}
+        \item False. Consider the matrix \( \begin{bmatrix}
+            1 & 2   \\
+            8 & 1
+        \end{bmatrix} \).
+        \item True. Using the spectrum theorem, we have \( A = Q\Lambda Q^T \), transpose both sides, we have \( A^T = Q\Lambda Q^T \) which is equal to \( A \).
+        \item True. \( {({A {(A^{-1})}^T})}^T = A^{-1} A^T = A^{-1} A = I \), so \( A^{-1} = {(A^{-1})}^T \) since the inverse of a matrix is unique.
+        \item False. Consider the matrix \( \begin{bmatrix}
+            1 & 2   \\
+            2 & 1
+        \end{bmatrix}\), the eigenvector matrix can be chosen as \( \begin{bmatrix}
+            -1 & -2 \\
+            1 & 2
+        \end{bmatrix} \).
+        \item False. Consider the matrix \( \begin{bmatrix}
+            1 & -10 \\
+            1 & -2
+        \end{bmatrix} \).
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Which 3 by 3 symmetric matrices \( S \) and \( T \) produce these quadratics?
+    \[
+        \begin{split}
+            \mathbf{x}^T S \mathbf{x} = 2(x_1^2 + x_2^2 + x_3^2 - x_1x_2 - x_2x_3).\ \ \text{Why is } S \text{ positive definite?}  \\
+        \mathbf{x}^T T \mathbf{x} = 2(x_1^2 + x_2^2 + x_3^2 - x_1x_2 - x_1x_3 - x_2x_3).\ \ \text{Why is } T \text{ semi-definite?}
+        \end{split}
+    \]
+
+    \solution
+
+    \[
+        S = \begin{bmatrix}
+            2 & -1/2 & 0 \\
+            -1/2 & 2 & -1/2 \\
+            0 & -1/2 & 2
+        \end{bmatrix}
+    \]
+
+    \( S \) is positive definite because \( \mathbf{x}^T S \mathbf{x} = x_1^2 + x_3^2 + {(x_1 - x_2)}^2 + {(x_2 - x_3)}^2 > 0 \) for all \( \mathbf{x} \neq 0 \).
+
+    \[
+        T = \begin{bmatrix}
+            2 & -1/2 & -1/2 \\
+            -1/2 & 2 & -1/2 \\
+            -1/2 & -1/2 & 2
+        \end{bmatrix}
+    \]
+
+    \( T \) is semi-definite because we only have \( \mathbf{x}^T T \mathbf{x} = {(x_1 - x_2)}^2 + {(x_1 - x_3)}^2 + {(x_2 - x_3)}^2 \geq 0 \) for all \( \mathbf{x} \).
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    \textbf{Important!} Suppose \( S \) is positive definite with eigenvalues \( \lambda_1 \geq \lambda_2 \geq \cdots \lambda_n \).
+    \begin{enumerate}
+        \item What are the eigenvalues of the matrix \( \lambda_1 I - S \)? Is it positive semi-definite?
+        \item How does it follow that \( \lambda_1 \mathbf{x}^T \mathbf{x} \geq \mathbf{x}^T S \mathbf{x} \) for every \( \mathbf{x} \)?
+        \item Draw this conclusion: \textbf{The maximum value of } \( \mathbf{x^T S x} / \mathbf{x^T x} \) \textbf{is} \emptyunderline.
+    \end{enumerate}
+
+    \solution
+
+    \begin{enumerate}
+        \item The eigenvalues of \( \lambda_1 I - S \) are \( 0, \lambda_1 - \lambda_2, \ldots, \lambda_1 - \lambda_n \), and it is positive semi-definite.
+        \item Since \( \lambda_1 I - S \) is semi-definite, we have \( \mathbf{x}^T (\lambda_1 I - S) \mathbf{x} \geq 0 \Rightarrow \lambda_1 \mathbf{x}^T \mathbf{x} \geq \mathbf{x}^T S \mathbf{x} \).
+        \item \( \lambda_1 \).
+    \end{enumerate}
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Find the eigenvalues and eigenvectors of the Hermitian matrix \( S = \begin{bmatrix}
+        1 & 1 + i   \\
+        1 - i & 2
+    \end{bmatrix} \).
+    \\
+
+    \solution
+    \\
+
+    The eigenvalues of \( S \) are \( \lambda_1 = 3, \lambda_2 = 0 \), the eigenvectors are \( \begin{bmatrix}
+        1 + i & -1
+    \end{bmatrix}^T \), \( \begin{bmatrix}
+        1 + i & 2
+    \end{bmatrix}^T \).
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    If \( Q^H Q = I \) (unitary matrix = complex orthogonal) and \( Q\mathbf{x} = \lambda \mathbf{x} \), show that \( |\lambda| = 1 \).
+    \\
+
+    \solution
+    \\
+
+    Conjuate and transpose both sides of \( Q\mathbf{x} = \lambda \mathbf{x} \), we have \( \mathbf{x}^H Q^H = \lambda^H \mathbf{x}^H \), combining two equations, we have
+    \( \mathbf{x}^H Q^H Q \mathbf{x} = \lambda^H \lambda \mathbf{x}^H \mathbf{x} \Rightarrow 1 = \lambda^H \lambda \Rightarrow |\lambda| = 1 \).
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Find two \( \lambda \)'s and \( \mathbf{x} \)'s so that \( \mathbf{u} = e^{\lambda t} \mathbf{x} \)
+    solves \( \frac{d\mathbf{u}}{dt} = \begin{bmatrix}
+        4 & 3 \\
+        0 & 1
+    \end{bmatrix} \mathbf{u}\).
+    What combination \( \mathbf{u} = c_1e^{\lambda_1 t}\mathbf{x}_1 + c_2e^{\lambda_2 t} \mathbf{x}_2 \) starts from \( \mathbf{u}(0) = (5, -2) \)?
+    \\
+
+    \solution
+
+    \begin{enumerate}
+        \item \( \lambda_1 = 4, \mathbf{x}_1 = \begin{bmatrix}
+            1 & 0
+        \end{bmatrix}^T, \lambda_2 = 1, \mathbf{x}_2 = \begin{bmatrix}
+            -1 & 1
+        \end{bmatrix}^T \).
+        \item \( \mathbf{u} = 3 e^{4t} \begin{bmatrix}
+            1 \\
+            0
+        \end{bmatrix} -
+        2 e^{t} \begin{bmatrix}
+            -1 \\
+            1
+        \end{bmatrix}
+        \).
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    \begin{enumerate}
+        \item If every column of \( A \) adds to zero, why is \( \lambda = 0 \) an eigenvalue?
+        \item With negative diagonal and positive off-diagonal adding to zero, \( \mathbf{u'} = A\mathbf{u} \) will
+        be a ``continuous'' Markov equation. Find the eigenvalues and eigenvectors, and the steady state as \( t \to \infty \)
+        \[
+            \text{Solve } \frac{d\mathbf{u}}{dt} = \begin{bmatrix}
+                -2 & 3 \\
+                2 & -3
+            \end{bmatrix}
+            \text{ with }
+            \mathbf{u}(0) = \begin{bmatrix}
+                4   \\
+                1
+            \end{bmatrix}.
+            \text{ What is } \mathbf{u}(\infty)?
+        \]
+
+        \solution
+
+        \begin{enumerate}
+            \item Yes. Because this property shows that \( A\begin{bmatrix}
+                1 \\
+                1 \\
+                1
+            \end{bmatrix} = \mathbf{0} \).
+            \item The eigenvalues are \( 0, -5 \) and the corresponding eigenvectors are \( \begin{bmatrix}
+                3 & 2
+            \end{bmatrix}^T, \begin{bmatrix}
+                -1 & 1
+            \end{bmatrix}^T \). Subsituting \( \mathbf{u}(0) = \begin{bmatrix} 4 \\ 1 \end{bmatrix} \), we know that the general solution of \( \mathbf{u} \) is \( \mathbf{u}(t) = \begin{bmatrix}
+                3 \\
+                2
+            \end{bmatrix} - e^{-5t} \begin{bmatrix}
+                -1  \\
+                1
+            \end{bmatrix}  \), let \( t \to \infty \), we get the steady state \( \mathbf{u}(\infty) = \begin{bmatrix}
+                3 \\
+                2
+            \end{bmatrix} \).
+        \end{enumerate}
+    \end{enumerate}
+\end{homeworkProblem}
+
+\end{document}

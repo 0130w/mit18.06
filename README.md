@@ -20,5 +20,5 @@ related link:
 - [x] ProblemSet 04
 - [x] ProblemSet 05 (contains the detail of the Gram-Schmidt process)
 - [x] ProblemSet 06
-- [ ] ProblemSet 07
+- [x] ProblemSet 07 (contains the review of the application of eigenvalues and eigenvectors)
 - [ ] ProblemSet 08

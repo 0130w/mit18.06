@@ -1,0 +1,305 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{boondox-cal}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{listings}
+\usepackage{algpseudocode}
+
+\usetikzlibrary{automata,positioning, arrows.meta}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\ (\hmwkClassInstructor): \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#8}
+\newcommand{\hmwkDueDate}{March 10, 2024}
+\newcommand{\hmwkClass}{Linear Algebra}
+\newcommand{\hmwkClassInstructor}{Gilbert Strang}
+\newcommand{\hmwkAuthorName}{\textbf{0130}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \vspace{0.1in}\large{\textit{\hmwkClassInstructor}}
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+% empty underline
+\newcommand{\emptyunderline}{\underline{\ \ \ \ \ \ }}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+Find the eigenvalues and singular values of this 2 by 2 matrix \( A \).
+
+\[
+    A = \begin{bmatrix}
+        2 & 1 \\ 4 & 2
+    \end{bmatrix}
+    \text{ with }
+    A^T A = \begin{bmatrix}
+        20 & 10 \\ 10 & 5
+    \end{bmatrix}
+    \text{ and }
+    A A^T = \begin{bmatrix}
+        5 & 10 \\ 10 & 20
+    \end{bmatrix}
+\]
+
+The eigenvectors \( (1, 2) \) and \( (1, -2) \) of \( A \) are not orthogonal.
+How do you know the eigenvectors \( \mathbf{v}_1, \mathbf{v}_2 \) of \( A^T A \) will be orthogonal?
+Notice that \( A^T A \) and \( A A^T \) have the same eigenvalues \( \lambda_1 = 25 \text{ and } \lambda_2 = 0 \).
+\\
+
+\solution
+
+\begin{enumerate}
+    \item The eigenvalues of \( A \) are 0 and 4.
+    \item The singular values of \( A \) are 5 and 0.
+    \item Because the matrix \( A^T A \) is symmetric, its eigenvectors will be orthogonal.
+\end{enumerate}
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Find \( A^T A \) and \( A A^T \) and the singular vectors \( \mathbf{v}_1, \mathbf{v}_2, \mathbf{u}_1, \mathbf{u}_2 \) for \( A \):
+    \[
+        A = \begin{bmatrix}
+            0 & 1 & 0   \\
+            0 & 0 & 8   \\
+            0 & 0 & 0
+        \end{bmatrix}
+        \text{  has rank }
+        r = 2.
+        \text{  The eigenvalues are }
+        0, 0, 0 
+    \]
+    Check the equations \( A\mathbf{v}_1 = \sigma_1 \mathbf{u}_1 \) and \( A\mathbf{v}_2 = \sigma_2 \mathbf{u}_2 \)
+    and \( A = \sigma_1 \mathbf{u_1}\mathbf{v}_1^T + \sigma_2 \mathbf{u}_2 \mathbf{v}_2^T \). If you remove row 3 by \( A \)
+    (all zeros), show that \( \sigma_1 \) and \( \sigma_2 \) don't change.
+    \\
+
+    \solution
+
+    \begin{enumerate}
+        \item \( A^T A = \begin{bmatrix}
+            0 & 0 & 0 \\
+            0 & 1 & 0 \\
+            0 & 0 & 64
+        \end{bmatrix} 
+        \), \( A A^T = \begin{bmatrix}
+            1 & 0 & 0 \\
+            0 & 64 & 0 \\
+            0 & 0 & 0
+        \end{bmatrix} \), the singular values of \( A \) are 1 and 8,
+        the singular vectors are \( \mathbf{v}_1 = \begin{bmatrix}
+            0 & 1 & 0
+        \end{bmatrix}^T, \mathbf{v}_2 = \begin{bmatrix}
+            0 & 0 & 1
+        \end{bmatrix}^T, \mathbf{u}_1 = \begin{bmatrix}
+            1 & 0 & 0
+        \end{bmatrix}^T, \mathbf{u}_2 = \begin{bmatrix}
+            0 & 1 & 0
+        \end{bmatrix}^T \).
+        \item Omitted.
+        \item If remove row 3 by \( A \), then \( A = \begin{bmatrix}
+            0 & 1 & 0 \\
+            0 & 0 & 8
+        \end{bmatrix} \), we get \( A^T A = \begin{bmatrix}
+            0 & 0 & 0 \\
+            0 & 1 & 0 \\
+            0 & 0 & 64
+        \end{bmatrix} \).
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    If \( (A^T A)\mathbf{v} = \sigma^2 \mathbf{v} \), multiply by \( A \). Move the 
+    parentheses to get \( (A A^T)A \mathbf{v} = \sigma^2 (A\mathbf{v}) \).
+
+    \( \textbf{If } \mathbf{v} \textbf{ is an eigenvector of } \mathbf{A^T A} \textbf{, then \emptyunderline is an eigenvector of } \mathbf{A A^T}\).
+    \\
+
+    \solution
+    \\
+
+    \( A\mathbf{v} \) is an eigenvector of \( A A^T \).
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    If \( A = Q \) is an orthogonal matrix, why does every singular value of \( Q \) equal 1?
+    \\
+
+    \solution
+    \\
+
+    Since \( Q \) is an orthogonal matrix, we have \( Q^T Q = I \), then we know:
+    \[
+        Q^T Q \mathbf{x} = \mathbf{x} = \lambda \mathbf{x} \Rightarrow \lambda = 1
+    \]
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    \begin{enumerate}
+        \item Why is the trace of \( A^T A \) equal to the sum of all \( a_{ij}^2? \)
+        \item For every rank-one matrix, why is \( \sigma_1^2 = \text{sum of all } a_{ij}^2? \)
+    \end{enumerate}
+
+    \solution
+
+    \begin{enumerate}
+        \item \( \text{trace} (A^T A) = \sum_{i} {(A^T A)}_{ii} = \sum_{i}\sum_{j}A^T_{ij} A_{ji} = \sum_{i,j} a_{ij}^2\)
+        \item For rank-one matrix \( A \), the number of singular value is only one, and the square of this singular value \( \sigma_1 \) is the only
+        non-zero eigenvalue of \( A^T A \), so \( \sigma_1^2 = \text{trace} (A^T A) = \text{ sum of all } a_{ij}^2 \).
+    \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+    Suppose \( A_0 \) holds these 2 measurements of 5 samples:
+    \[
+        A_0 = \begin{bmatrix}
+            5 & 4 & 3 & 2 & 1   \\
+            -1 & 1 & 0 & 1 & -1
+        \end{bmatrix}
+    \]
+
+    Find the average of each row and subtract it to produce the
+    centered matrix \( A \). Compute the sample covariance matrix \( S = A A^T / (n-1) \) and 
+    find its eigenvalues \( \lambda_1 \) and \( \lambda_2 \). What line
+    through the origin is closest to the 5 samples in columns of \( A \)?
+    \\
+
+    \solution
+    \\
+    
+    Centered matrix \( A \) = 
+    \( \begin{bmatrix}
+        2 & 1 & 0 & -1 & -2 \\
+        -1 & 1 & 0 & 1 & -1
+    \end{bmatrix} \), sample covariance matrix \( S \) = \( \begin{bmatrix}
+        5/2 & 0 \\
+        0 & 1
+    \end{bmatrix} \), the eigenvalues of \( S \) are \( \lambda_1 = 5/2, \lambda_2 = 1 \),
+    the corresponding eigenvectors are \( \begin{bmatrix}
+        1 \\ 0
+    \end{bmatrix}, \begin{bmatrix}
+        0 \\ 1
+    \end{bmatrix} \), then we know the closest line through the origin is \( y = 0 \).
+\end{homeworkProblem}
+
+\end{document}

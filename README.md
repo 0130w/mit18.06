@@ -22,3 +22,7 @@ related link:
 - [x] ProblemSet 06
 - [x] ProblemSet 07 (contains the review of the application of eigenvalues and eigenvectors)
 - [x] ProblemSet 08
+
+## Contributor
+
+Thanks to [@DuKle3](https://github.com/DuKle3) for his contribution to the correction of this repository.
